@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QPlainTextEdit>
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
