@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
+#include <QPlainTextEdit>
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -13,23 +13,13 @@ public:
 
 private slots:
 
-    void newFile();
-
 private:
+
+    QPlainTextEdit *tabSheet;
 
     void createActions();
     void createMenus();
-    void createContextMenu();
-    void createToolBars();
-    void createStatusBar();
 
-    QToolBar *fileToolBar;
-    QToolBar *editToolBar;
-
-    QAction *newAction;
-    QAction *openAction;
-    QAction *saveAction;
-    QAction *saveAsAction;
     QAction *exitAction;
 
     QMenu *fileMenu;
