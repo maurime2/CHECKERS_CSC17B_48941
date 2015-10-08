@@ -1,0 +1,33 @@
+Checkers
+
+
+Chapters 13,14    Gaddis Objects
+
+Chapters 15,16    Gaddis Objects
+
+Chapter 1   Hello World
+
+Chapter 2   Dialogs
+
+Chapter 3   Main Windows
+
+Chapter 4   App Functionality
+
+Chapter 5   Custom Widgets
+
+Individual Projects and Team Presentations
+ 
+ 
+ 
+		CHECKERS - Wish List
+		
+* Prompt Players: 	Two Players (One with AI in the second part)
+		
+* Classes: 			Player 1, Player 2: One dimensional Array that will hold
+					the state of each peace [Regular, Kinged, Eaten]
+
+* Class Print Board:  
+ 
+ 
+*Class Move Legal:	This Class Move Legal should check if part can move to next spot.
+
