@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QPlainTextEdit>
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -13,13 +14,22 @@ public:
 
 private slots:
 
+    void newFile();
+    void open();
+    void save();
+    void saveAs();
+
 private:
-    //bool okToContinue(); rename as "pendingSave"
+
     QPlainTextEdit *tabSheet;
 
     void createActions();
     void createMenus();
 
+    QAction *newAction;
+    QAction *openAction;
+    QAction *saveAction;
+    QAction *saveAsAction;
     QAction *exitAction;
 
     QMenu *fileMenu;
