@@ -14,7 +14,7 @@ public:
 private slots:
 
 private:
-    //bool okToContinue(); rename as "pendingSave"
+
     QPlainTextEdit *tabSheet;
 
     void createActions();
