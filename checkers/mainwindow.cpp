@@ -1,7 +1,7 @@
-#include "mainwindow.h"
-
 #include <QAction>
 #include <QMenuBar>
+
+#include "mainwindow.h"
 
 MainWindow::MainWindow()
 {
@@ -29,7 +29,7 @@ void MainWindow::createActions()
     connect(saveAction, SIGNAL(triggered(bool)),
             this, SLOT(save()));
 
-    saveAsAction = new QAction("Save As", this);
+    saveAsAction = new QAction(QIcon(":/images/SaveAs.png"), "Save As...", this);
     saveAsAction->setShortcut(QKeySequence::SaveAs);
     connect(saveAsAction, SIGNAL(triggered(bool)),
             this, SLOT(saveAs()));
