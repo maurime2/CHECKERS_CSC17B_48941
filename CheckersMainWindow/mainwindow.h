@@ -21,10 +21,11 @@ private slots:
 
 private:
 
-    QPlainTextEdit *tabSheet;
-
     void createActions();
     void createMenus();
+    bool pendingSave();
+
+    QPlainTextEdit *tabSheet;
 
     QAction *newAction;
     QAction *openAction;

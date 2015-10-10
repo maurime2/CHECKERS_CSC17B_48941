@@ -19,3 +19,5 @@ HEADERS  += mainwindow.h
 
 RESOURCES += \
     checkers.qrc
+
+DISTFILES +=
