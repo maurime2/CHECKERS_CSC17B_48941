@@ -20,11 +20,6 @@ private slots:
     void saveAs();
 
 private:
-<<<<<<< HEAD:mainwindow.h
-
-    QPlainTextEdit *tabSheet;
-=======
->>>>>>> 61e74027b85458879f5362e8f5f1c3d4a58d8dba:checkers/mainwindow.h
 
     void createActions();
     void createMenus();
