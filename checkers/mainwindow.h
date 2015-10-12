@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QPlainTextEdit>
+#include <QLabel>
 
 class MainWindow : public QMainWindow
 {
@@ -23,9 +24,10 @@ private:
 
     void createActions();
     void createMenus();
-    bool pendingSave();
+    void createStatusBar();
+    bool askToSave();
 
-    QPlainTextEdit *tabSheet;
+    QLabel *tileLocationLabel;
 
     QAction *newAction;
     QAction *openAction;
