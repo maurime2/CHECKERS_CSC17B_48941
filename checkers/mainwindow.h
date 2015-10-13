@@ -13,21 +13,27 @@ public:
 
     MainWindow();
 
+protected:
+
+    void closeEvent(QCloseEvent *event);
+
 private slots:
 
     void newFile();
     void open();
-    void save();
-    void saveAs();
+    bool save();
+    bool saveAs();
+    void gameModified();
 
 private:
 
     void createActions();
     void createMenus();
     void createStatusBar();
-    bool askToSave();
+    bool checkIfSaved();
 
     QLabel *tileLocationLabel;
+    QPlainTextEdit *textEdit; // will delete later. For demo only
 
     QAction *newAction;
     QAction *openAction;

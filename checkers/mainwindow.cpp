@@ -1,14 +1,21 @@
 #include <QAction>
 #include <QMenuBar>
 #include <QStatusBar>
+#include <QMessageBox>
 
 #include "mainwindow.h"
 
 MainWindow::MainWindow()
 {
+    textEdit = new QPlainTextEdit;
+    setCentralWidget(textEdit);
+
     createActions();
     createMenus();
     createStatusBar();
+
+    connect(textEdit->document(), SIGNAL(contentsChanged()),
+            this, SLOT(gameModified()));
 }
 
 void MainWindow::createActions()
@@ -39,6 +46,7 @@ void MainWindow::createActions()
 
     exitAction = new QAction("Exit", this);
     exitAction->setShortcut(tr("Ctrl+Q"));
+    exitAction->setStatusTip("Exit the application");
     connect(exitAction, SIGNAL(triggered(bool)),
             this, SLOT(close()));
 }
@@ -55,26 +63,6 @@ void MainWindow::createMenus()
 
 }
 
-void MainWindow::newFile()
-{
-
-}
-
-void MainWindow::open()
-{
-
-}
-
-void MainWindow::save()
-{
-
-}
-
-void MainWindow::saveAs()
-{
-
-}
-
 void MainWindow::createStatusBar()
 {
     tileLocationLabel = new QLabel("Tile location not implemented");
@@ -83,3 +71,60 @@ void MainWindow::createStatusBar()
 
     statusBar()->addWidget(tileLocationLabel);
 }
+
+void MainWindow::gameModified()
+{
+    setWindowModified(textEdit->document()->isModified());
+}
+
+bool MainWindow::checkIfSaved()
+{
+    if (isWindowModified()) {
+        int r = QMessageBox::warning(this, tr("Spreadsheet"),
+                        tr("The document has been modified.\n"
+                           "Do you want to save your changes?"),
+                        QMessageBox::Yes | QMessageBox::No
+                        | QMessageBox::Cancel);
+        if (r == QMessageBox::Yes) {
+            return save();
+        } else if (r == QMessageBox::Cancel) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void MainWindow::newFile()
+{
+    if (checkIfSaved()) {
+        textEdit->clear();
+        //setCurrentFile("");
+    }
+}
+
+void MainWindow::open()
+{
+
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    if (checkIfSaved()) {
+        //writeSettings();
+        event->accept();
+    } else {
+        event->ignore();
+    }
+}
+
+bool MainWindow::save()
+{
+
+}
+
+bool MainWindow::saveAs()
+{
+
+}
+
+
