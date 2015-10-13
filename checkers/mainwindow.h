@@ -30,7 +30,7 @@ private:
     void createActions();
     void createMenus();
     void createStatusBar();
-    bool checkIfSaved();
+    bool checkToSaveGame();
     void writeSettings();
     void readSettings();
 

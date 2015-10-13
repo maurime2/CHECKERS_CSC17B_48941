@@ -23,25 +23,29 @@ MainWindow::MainWindow()
 
 void MainWindow::createActions()
 {
-    newAction = new QAction(QIcon(":/images/New.png"), "New", this);
+    newAction = new QAction("New", this);
+    newAction->setIcon(QIcon(":/images/New.png"));
     newAction->setShortcut(QKeySequence::New);
     newAction->setStatusTip("Create a new game");
     connect(newAction, SIGNAL(triggered(bool)),
             this, SLOT(newFile()));
 
-    openAction = new QAction(QIcon(":/images/Open.png"), "Open", this);
+    openAction = new QAction("Open", this);
+    openAction->setIcon(QIcon(":/images/Open.png"));
     openAction->setShortcut(QKeySequence::Open);
     openAction->setStatusTip("Open an existing game file");
     connect(openAction, SIGNAL(triggered(bool)),
             this, SLOT(open()));
 
-    saveAction = new QAction(QIcon(":/images/Save.png"), "Save", this);
+    saveAction = new QAction("Save", this);
+    saveAction->setIcon(QIcon(":/images/Save.png"));
     saveAction->setShortcut(QKeySequence::Save);
     saveAction->setStatusTip("Save game to disk");
     connect(saveAction, SIGNAL(triggered(bool)),
             this, SLOT(save()));
 
-    saveAsAction = new QAction(QIcon(":/images/SaveAs.png"), "Save As...", this);
+    saveAsAction = new QAction("Save As...", this);
+    saveAsAction->setIcon(QIcon(":/images/SaveAs.png"));
     saveAsAction->setShortcut(QKeySequence::SaveAs);
     saveAsAction->setStatusTip("Save game under new file name");
     connect(saveAsAction, SIGNAL(triggered(bool)),
@@ -80,7 +84,7 @@ void MainWindow::gameModified()
     setWindowModified(textEdit->document()->isModified());
 }
 
-bool MainWindow::checkIfSaved()
+bool MainWindow::checkToSaveGame()
 {
     if (textEdit->document()->isModified()) {
         QMessageBox::StandardButton ret;
@@ -98,7 +102,7 @@ bool MainWindow::checkIfSaved()
 
 void MainWindow::newFile()
 {
-    if (checkIfSaved()) {
+    if (checkToSaveGame()) {
         textEdit->clear();
         //setCurrentFile("");
     }
@@ -111,7 +115,7 @@ void MainWindow::open()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if (checkIfSaved()) {
+    if (checkToSaveGame()) {
         writeSettings();
         event->accept();
     } else {
