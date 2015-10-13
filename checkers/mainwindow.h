@@ -31,6 +31,8 @@ private:
     void createMenus();
     void createStatusBar();
     bool checkIfSaved();
+    void writeSettings();
+    void readSettings();
 
     QLabel *tileLocationLabel;
     QPlainTextEdit *textEdit; // will delete later. For demo only

@@ -2,6 +2,7 @@
 #include <QMenuBar>
 #include <QStatusBar>
 #include <QMessageBox>
+#include <QSettings>
 
 #include "mainwindow.h"
 
@@ -13,6 +14,8 @@ MainWindow::MainWindow()
     createActions();
     createMenus();
     createStatusBar();
+
+    readSettings();
 
     connect(textEdit->document(), SIGNAL(contentsChanged()),
             this, SLOT(gameModified()));
@@ -79,17 +82,16 @@ void MainWindow::gameModified()
 
 bool MainWindow::checkIfSaved()
 {
-    if (isWindowModified()) {
-        int r = QMessageBox::warning(this, tr("Spreadsheet"),
-                        tr("The document has been modified.\n"
-                           "Do you want to save your changes?"),
-                        QMessageBox::Yes | QMessageBox::No
-                        | QMessageBox::Cancel);
-        if (r == QMessageBox::Yes) {
+    if (textEdit->document()->isModified()) {
+        QMessageBox::StandardButton ret;
+        ret = QMessageBox::warning(this, tr("Application"),
+                     tr("The document has been modified.\n"
+                        "Do you want to save your changes?"),
+                     QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        if (ret == QMessageBox::Save)
             return save();
-        } else if (r == QMessageBox::Cancel) {
+        else if (ret == QMessageBox::Cancel)
             return false;
-        }
     }
     return true;
 }
@@ -110,21 +112,36 @@ void MainWindow::open()
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     if (checkIfSaved()) {
-        //writeSettings();
+        writeSettings();
         event->accept();
     } else {
         event->ignore();
     }
 }
 
+
 bool MainWindow::save()
 {
-
+    return true;
 }
 
 bool MainWindow::saveAs()
 {
-
+    return true;
 }
 
+void MainWindow::writeSettings()
+{
+    QSettings settings("The Checkers Group", "Checkers");
+    settings.setValue("pos", pos());
+    settings.setValue("size", size());
+}
 
+void MainWindow::readSettings()
+{
+    QSettings settings("The Checkers Group", "Checkers");
+    QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
+    QSize size = settings.value("size", QSize(400, 400)).toSize();
+    resize(size);
+    move(pos);
+}
