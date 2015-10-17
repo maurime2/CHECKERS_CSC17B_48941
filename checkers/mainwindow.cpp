@@ -23,35 +23,35 @@ MainWindow::MainWindow()
 
 void MainWindow::createActions()
 {
-    newAction = new QAction("New", this);
+    newAction = new QAction("&New", this);
     newAction->setIcon(QIcon(":/images/New.png"));
     newAction->setShortcut(QKeySequence::New);
     newAction->setStatusTip("Create a new game");
     connect(newAction, SIGNAL(triggered(bool)),
             this, SLOT(newFile()));
 
-    openAction = new QAction("Open", this);
+    openAction = new QAction("&Open", this);
     openAction->setIcon(QIcon(":/images/Open.png"));
     openAction->setShortcut(QKeySequence::Open);
     openAction->setStatusTip("Open an existing game file");
     connect(openAction, SIGNAL(triggered(bool)),
             this, SLOT(open()));
 
-    saveAction = new QAction("Save", this);
-    saveAction->setIcon(QIcon(":/images/Save.png"));
+    saveAction = new QAction("&Save", this);
+    saveAction->setIcon((QIcon(":/images/Save.png")));
     saveAction->setShortcut(QKeySequence::Save);
     saveAction->setStatusTip("Save game to disk");
     connect(saveAction, SIGNAL(triggered(bool)),
             this, SLOT(save()));
 
-    saveAsAction = new QAction("Save As...", this);
+    saveAsAction = new QAction("Save &As...", this);
     saveAsAction->setIcon(QIcon(":/images/SaveAs.png"));
     saveAsAction->setShortcut(QKeySequence::SaveAs);
     saveAsAction->setStatusTip("Save game under new file name");
     connect(saveAsAction, SIGNAL(triggered(bool)),
             this, SLOT(saveAs()));
 
-    exitAction = new QAction("Exit", this);
+    exitAction = new QAction("E&xit", this);
     exitAction->setShortcut(tr("Ctrl+Q"));
     exitAction->setStatusTip("Exit the application");
     connect(exitAction, SIGNAL(triggered(bool)),
@@ -60,14 +60,13 @@ void MainWindow::createActions()
 
 void MainWindow::createMenus()
 {
-    fileMenu = menuBar()->addMenu("File");
+    fileMenu = menuBar()->addMenu("&File");
     fileMenu->addAction(newAction);
     fileMenu->addAction(openAction);
     fileMenu->addAction(saveAction);
     fileMenu->addAction(saveAsAction);
     fileMenu->addSeparator();
     fileMenu->addAction(exitAction);
-
 }
 
 void MainWindow::createStatusBar()
