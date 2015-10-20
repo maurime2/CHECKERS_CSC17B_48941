@@ -2,8 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QPlainTextEdit>
+#include <QPlainTextEdit>// delete. for demo only
 #include <QLabel>
+
+#include "startscreen.h"
 
 class MainWindow : public QMainWindow
 {
@@ -15,6 +17,7 @@ public:
 
 protected:
 
+    void showEvent(QShowEvent *event);
     void closeEvent(QCloseEvent *event);
 
 private slots:
@@ -34,6 +37,7 @@ private:
     void writeSettings();
     void readSettings();
 
+    //StartWindow *startWindow;
     QLabel *tileLocationLabel;
     QPlainTextEdit *textEdit; // will delete later. For demo only
 

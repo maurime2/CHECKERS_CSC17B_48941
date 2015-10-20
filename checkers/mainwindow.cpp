@@ -3,8 +3,11 @@
 #include <QStatusBar>
 #include <QMessageBox>
 #include <QSettings>
+#include <QTimer>
+#include <QSplashScreen>
 
 #include "mainwindow.h"
+#include "startscreen.h"
 
 MainWindow::MainWindow()
 {
@@ -19,6 +22,15 @@ MainWindow::MainWindow()
 
     connect(textEdit->document(), SIGNAL(contentsChanged()),
             this, SLOT(gameModified()));
+}
+
+void MainWindow::showEvent(QShowEvent *event)
+{
+    //startWindow = new StartWindow(this);
+
+    //startWindow->show();
+    //startWindow->raise();
+    //startWindow->activateWindow();
 }
 
 void MainWindow::createActions()
@@ -60,6 +72,7 @@ void MainWindow::createActions()
 
 void MainWindow::createMenus()
 {
+    menuBar()->setNativeMenuBar(false);
     fileMenu = menuBar()->addMenu("&File");
     fileMenu->addAction(newAction);
     fileMenu->addAction(openAction);

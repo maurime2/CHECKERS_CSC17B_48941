@@ -2,7 +2,7 @@
 #include <QSplashScreen>
 #include <QTimer>
 
-#include "mainwindow.h"
+#include "startscreen.h"
 
 int main(int argc, char *argv[])
 {
@@ -12,10 +12,10 @@ int main(int argc, char *argv[])
     splash->setPixmap(QPixmap(":/images/Qt.png"));
     splash->show();
 
-    MainWindow window;
+    StartScreen startScreen;
 
     QTimer::singleShot(1000, splash, SLOT(close()));
-    QTimer::singleShot(1000, &window, SLOT(show()));
+    QTimer::singleShot(1000, &startScreen, SLOT(show()));
 
     return app.exec();
 }
