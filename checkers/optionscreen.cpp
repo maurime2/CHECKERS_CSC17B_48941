@@ -2,15 +2,19 @@
 #include <QVBoxLayout>
 
 #include "mainwindow.h"
-#include "startscreen.h"
+#include "optionscreen.h"
 
-StartScreen::StartScreen(QWidget *parent) : QDialog(parent)
+OptionScreen::OptionScreen(QWidget *parent) : QDialog(parent)
 {
-    MainWindow *main = new MainWindow;
+    MainWindow *mainWindow = new MainWindow;
     continueButton = new QPushButton("Continue");
     newButton = new QPushButton("New Game");
     loadButton = new QPushButton("Load Game");
     quitButton = new QPushButton("Quit");
+
+    connect(continueButton, SIGNAL(clicked()), mainWindow, SLOT(show()));
+    connect(continueButton, SIGNAL(clicked()), this, SLOT(close()));
+    connect(quitButton, SIGNAL(clicked()), this, SLOT(close()));
 
     QVBoxLayout *layout = new QVBoxLayout;
 
@@ -22,9 +26,7 @@ StartScreen::StartScreen(QWidget *parent) : QDialog(parent)
     layout->setContentsMargins(80, 50, 80, 50);
     this->layout()->setSizeConstraint(QLayout::SetFixedSize);
 
-    connect(continueButton, SIGNAL(clicked()), main, SLOT(show()));
-    connect(continueButton, SIGNAL(clicked()), this, SLOT(close()));
-    connect(quitButton, SIGNAL(clicked()), this, SLOT(close()));
-
     setWindowTitle("Checkers");
 }
+
+

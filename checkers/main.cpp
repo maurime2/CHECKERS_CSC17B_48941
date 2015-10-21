@@ -2,7 +2,7 @@
 #include <QSplashScreen>
 #include <QTimer>
 
-#include "startscreen.h"
+#include "optionscreen.h"
 #include "mainwindow.h"
 
 int main(int argc, char *argv[])
@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     splash->setPixmap(QPixmap(":/images/Qt.png"));
     splash->show();
 
-    StartScreen startScreen;
+    OptionScreen startScreen;
     MainWindow main;
 
     QTimer time;

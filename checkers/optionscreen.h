@@ -6,11 +6,11 @@
 
 #include "mainwindow.h"
 
-class StartScreen : public QDialog
+class OptionScreen : public QDialog
 {
 public:
 
-    StartScreen(QWidget *parent = 0);
+    OptionScreen(QWidget *parent = 0);
 
 private:
 
