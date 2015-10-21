@@ -3,6 +3,7 @@
 #include <QTimer>
 
 #include "startscreen.h"
+#include "mainwindow.h"
 
 int main(int argc, char *argv[])
 {
@@ -13,9 +14,11 @@ int main(int argc, char *argv[])
     splash->show();
 
     StartScreen startScreen;
+    MainWindow main;
 
-    QTimer::singleShot(1000, splash, SLOT(close()));
-    QTimer::singleShot(1000, &startScreen, SLOT(show()));
+    QTimer time;
+    time.singleShot(1000, splash, SLOT(close()));
+    time.singleShot(1000, &startScreen, SLOT(exec()));
 
     return app.exec();
 }

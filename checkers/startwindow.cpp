@@ -6,6 +6,7 @@
 
 StartScreen::StartScreen(QWidget *parent) : QDialog(parent)
 {
+    MainWindow *main = new MainWindow;
     continueButton = new QPushButton("Continue");
     newButton = new QPushButton("New Game");
     loadButton = new QPushButton("Load Game");
@@ -20,6 +21,10 @@ StartScreen::StartScreen(QWidget *parent) : QDialog(parent)
     layout->addWidget(quitButton);
     layout->setContentsMargins(80, 50, 80, 50);
     this->layout()->setSizeConstraint(QLayout::SetFixedSize);
+
+    connect(continueButton, SIGNAL(clicked()), main, SLOT(show()));
+    connect(continueButton, SIGNAL(clicked()), this, SLOT(close()));
+    connect(quitButton, SIGNAL(clicked()), this, SLOT(close()));
 
     setWindowTitle("Checkers");
 }
