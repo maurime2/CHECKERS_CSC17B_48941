@@ -2,6 +2,7 @@
 #include <QSplashScreen>
 #include <QTimer>
 
+#include "optionscreen.h"
 #include "mainwindow.h"
 
 int main(int argc, char *argv[])
@@ -12,10 +13,12 @@ int main(int argc, char *argv[])
     splash->setPixmap(QPixmap(":/images/Qt.png"));
     splash->show();
 
-    MainWindow window;
+    OptionScreen startScreen;
+    MainWindow main;
 
-    QTimer::singleShot(1000, splash, SLOT(close()));
-    QTimer::singleShot(1000, &window, SLOT(show()));
+    QTimer time;
+    time.singleShot(1000, splash, SLOT(close()));
+    time.singleShot(1000, &startScreen, SLOT(exec()));
 
     return app.exec();
 }
