@@ -14,6 +14,14 @@ OptionScreen::OptionScreen(QWidget *parent) : QDialog(parent)
 
     connect(continueButton, SIGNAL(clicked()), mainWindow, SLOT(show()));
     connect(continueButton, SIGNAL(clicked()), this, SLOT(close()));
+
+    connect(newButton, SIGNAL(clicked()), mainWindow, SLOT(newFile()));
+    connect(newButton, SIGNAL(clicked()), this, SLOT(close()));
+
+    connect(loadButton, SIGNAL(clicked()), mainWindow, SLOT(open()));
+    connect(loadButton, SIGNAL(clicked()), this, SLOT(close()));
+
+    connect(quitButton, SIGNAL(clicked()), mainWindow, SLOT(close()));
     connect(quitButton, SIGNAL(clicked()), this, SLOT(close()));
 
     QVBoxLayout *layout = new QVBoxLayout;
