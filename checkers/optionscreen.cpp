@@ -16,7 +16,7 @@ OptionScreen::OptionScreen(QWidget *parent) : QDialog(parent)
     connect(newButton, SIGNAL(clicked()), parent, SLOT(newFile()));
     connect(newButton, SIGNAL(clicked()), this, SLOT(close()));
 
-    connect(continueButton, SIGNAL(clicked()), parent, SLOT(show()));
+    connect(continueButton, SIGNAL(clicked()), parent, SLOT(open()));
     connect(continueButton, SIGNAL(clicked()), this, SLOT(close()));
 
     connect(loadButton, SIGNAL(clicked()), parent, SLOT(open()));

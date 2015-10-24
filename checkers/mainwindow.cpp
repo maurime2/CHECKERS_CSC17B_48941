@@ -6,6 +6,7 @@
 #include <QStatusBar>
 #include <QSettings>
 #include <QTextStream>
+#include <QApplication>
 
 #include "mainwindow.h"
 #include "optionscreen.h"
@@ -245,6 +246,7 @@ bool MainWindow::maybeSave()
 }
 
 void MainWindow::loadFile(const QString &fileName)
+//! [42] //! [43]
 {
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
@@ -256,6 +258,13 @@ void MainWindow::loadFile(const QString &fileName)
     }
 
     QTextStream in(&file);
+#ifndef QT_NO_CURSOR
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+#endif
+    textEdit->setPlainText(in.readAll());
+#ifndef QT_NO_CURSOR
+    QApplication::restoreOverrideCursor();
+#endif
 
     setCurrentFile(fileName);
     statusBar()->showMessage(tr("File loaded"), 2000);
