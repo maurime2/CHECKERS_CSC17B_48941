@@ -8,9 +8,10 @@
 #include <QTextStream>
 
 #include "mainwindow.h"
+#include "optionscreen.h"
 
 MainWindow::MainWindow()
-{
+{   
     textEdit = new QPlainTextEdit;
     setCentralWidget(textEdit);
 
@@ -25,22 +26,35 @@ MainWindow::MainWindow()
             this, SLOT(documentWasModified()));
 
     setCurrentFile("");
-    setUnifiedTitleAndToolBarOnMac(true);
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if (maybeSave()) {
+    if (maybeSave())
+    {
         writeSettings();
         event->accept();
-    } else {
+    }
+    else
+    {
         event->ignore();
+    }
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_Escape)
+    {
+        OptionScreen *mainMenu = new OptionScreen(this);
+        mainMenu->setModal(true);
+        mainMenu->show();
     }
 }
 
 void MainWindow::newFile()
 {
-    if (maybeSave()) {
+    if (maybeSave()){
+
         textEdit->clear();
         setCurrentFile("");
     }
@@ -49,17 +63,22 @@ void MainWindow::newFile()
 void MainWindow::open()
 {
     if (maybeSave()) {
+
         QString fileName = QFileDialog::getOpenFileName(this);
         if (!fileName.isEmpty())
             loadFile(fileName);
     }
+
 }
 
 bool MainWindow::save()
 {
     if (curFile.isEmpty()) {
+
         return saveAs();
-    } else {
+    }
+    else {
+
         return saveFile(curFile);
     }
 }
@@ -208,7 +227,8 @@ void MainWindow::writeSettings()
 
 bool MainWindow::maybeSave()
 {
-    if (textEdit->document()->isModified()) {
+    if (textEdit->document()->isModified())
+    {
         QMessageBox::StandardButton ret;
         ret = QMessageBox::warning(this, tr("Application"),
                      tr("The document has been modified.\n"
@@ -217,7 +237,9 @@ bool MainWindow::maybeSave()
         if (ret == QMessageBox::Save)
             return save();
         else if (ret == QMessageBox::Cancel)
+        {
             return false;
+        }
     }
     return true;
 }

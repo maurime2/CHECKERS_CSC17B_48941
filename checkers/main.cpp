@@ -13,12 +13,13 @@ int main(int argc, char *argv[])
     splash->setPixmap(QPixmap(":/images/Qt.png"));
     splash->show();
 
-    OptionScreen startScreen;
-    MainWindow main;
+    MainWindow *mainWindow = new MainWindow;
+    OptionScreen *mainMenu = new OptionScreen(mainWindow);
+    mainMenu->setModal(true);
 
-    QTimer time;
-    time.singleShot(1000, splash, SLOT(close()));
-    time.singleShot(1000, &startScreen, SLOT(exec()));
+    QTimer::singleShot(1000, splash, SLOT(close()));
+    QTimer::singleShot(1000, mainWindow, SLOT(showFullScreen()));
+    QTimer::singleShot(1000, mainMenu, SLOT(show()));
 
     return app.exec();
 }

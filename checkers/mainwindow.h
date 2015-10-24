@@ -12,9 +12,12 @@ public:
     MainWindow();
 
 protected:
-    void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
 
-private slots:
+    void keyPressEvent(QKeyEvent *event);
+    void closeEvent(QCloseEvent *event);
+
+public slots:
+
     void newFile();
     void open();
     bool save();
@@ -23,6 +26,7 @@ private slots:
     void documentWasModified();
 
 private:
+
     void createActions();
     void createMenus();
     void createToolBars();
