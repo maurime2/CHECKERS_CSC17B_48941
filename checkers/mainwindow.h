@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QPlainTextEdit>
+#include <QPlainTextEdit> //delete me
 
 class MainWindow : public QMainWindow
 {
@@ -14,10 +14,9 @@ public:
 protected:
 
     void keyPressEvent(QKeyEvent *event);
-    void closeEvent(QCloseEvent *event);
+    void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
 
-public slots:
-
+private slots:
     void newFile();
     void open();
     bool save();
@@ -26,7 +25,6 @@ public slots:
     void documentWasModified();
 
 private:
-
     void createActions();
     void createMenus();
     void createToolBars();
@@ -44,17 +42,19 @@ private:
 
     QMenu *fileMenu;
     QMenu *editMenu;
-
+    QMenu *helpMenu;
     QToolBar *fileToolBar;
     QToolBar *editToolBar;
-    QAction *newAction;
-    QAction *openAction;
-    QAction *saveAction;
-    QAction *saveAsAction;
-    QAction *exitAction;
-    QAction *cutAction;
-    QAction *copyAction;
-    QAction *pasteAction;
+    QAction *newAct;
+    QAction *openAct;
+    QAction *saveAct;
+    QAction *saveAsAct;
+    QAction *exitAct;
+    QAction *cutAct;
+    QAction *copyAct;
+    QAction *pasteAct;
+    QAction *aboutAct;
+    QAction *aboutQtAct;
 };
 
-#endif // MAINWINDOW_H
+#endif

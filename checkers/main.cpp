@@ -2,7 +2,7 @@
 #include <QSplashScreen>
 #include <QTimer>
 
-#include "optionscreen.h"
+#include "menu.h"
 #include "mainwindow.h"
 
 int main(int argc, char *argv[])
@@ -14,12 +14,12 @@ int main(int argc, char *argv[])
     splash->show();
 
     MainWindow *mainWindow = new MainWindow;
-    OptionScreen *mainMenu = new OptionScreen(mainWindow);
-    mainMenu->setModal(true);
+    Menu *menu = new Menu(mainWindow);
+    menu->setModal(true);
 
     QTimer::singleShot(1000, splash, SLOT(close()));
     QTimer::singleShot(1000, mainWindow, SLOT(showFullScreen()));
-    QTimer::singleShot(1000, mainMenu, SLOT(show()));
+    QTimer::singleShot(1000, menu, SLOT(show()));
 
     return app.exec();
 }

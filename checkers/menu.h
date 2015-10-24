@@ -6,11 +6,11 @@
 
 #include "mainwindow.h"
 
-class OptionScreen : public QDialog
+class Menu : public QDialog
 {
 public:
 
-    OptionScreen(QWidget *parent = 0);
+    Menu(QWidget *parent = 0);
 
 private:
 

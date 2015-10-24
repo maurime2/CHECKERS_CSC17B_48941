@@ -14,10 +14,10 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    optionscreen.cpp
+    menu.cpp
 
 HEADERS  += mainwindow.h \
-    optionscreen.h
+    menu.h
 
 RESOURCES += \
     checkers.qrc

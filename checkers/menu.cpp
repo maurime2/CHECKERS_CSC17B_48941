@@ -2,9 +2,9 @@
 #include <QVBoxLayout>
 
 #include "mainwindow.h"
-#include "optionscreen.h"
+#include "menu.h"
 
-OptionScreen::OptionScreen(QWidget *parent) : QDialog(parent)
+Menu::Menu(QWidget *parent) : QDialog(parent)
 {
     setWindowTitle("Checkers");
 
