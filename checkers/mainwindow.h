@@ -9,6 +9,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+
     MainWindow();
 
 protected:
@@ -17,6 +18,7 @@ protected:
     void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
+
     void newFile();
     void open();
     bool save();
@@ -25,6 +27,7 @@ private slots:
     void documentWasModified();
 
 private:
+
     void createActions();
     void createMenus();
     void createToolBars();

@@ -18,6 +18,7 @@ private:
     QPushButton *continueButton;
     QPushButton *loadButton;
     QPushButton *quitButton;
+    QPushButton *optionsButton;
 };
 
 #endif // STARTWINDOW_H

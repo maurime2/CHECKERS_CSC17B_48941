@@ -33,12 +33,14 @@ MainWindow::MainWindow()
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
+    Menu *menu = new Menu(this);
     if(event->key() == Qt::Key_Escape)
     {
-        Menu *menu = new Menu(this);
-        menu->setModal(true);
+        this->hide();
         menu->show();
     }
+
+    connect(menu, SIGNAL(finished(int)), this, SLOT(show()));
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)

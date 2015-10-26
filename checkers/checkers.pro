@@ -21,3 +21,5 @@ HEADERS  += mainwindow.h \
 
 RESOURCES += \
     checkers.qrc
+
+OTHER_FILES +=

@@ -15,11 +15,11 @@ int main(int argc, char *argv[])
 
     MainWindow *mainWindow = new MainWindow;
     Menu *menu = new Menu(mainWindow);
-    menu->setModal(true);
 
     QTimer::singleShot(1000, splash, SLOT(close()));
-    QTimer::singleShot(1000, mainWindow, SLOT(showFullScreen()));
     QTimer::singleShot(1000, menu, SLOT(show()));
+
+    QObject::connect(menu, SIGNAL(finished(int)), mainWindow, SLOT(show()));
 
     return app.exec();
 }
