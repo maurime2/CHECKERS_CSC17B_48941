@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
     QTimer::singleShot(1000, menu, SLOT(show()));
 
     QObject::connect(menu, SIGNAL(finished(int)), mainWindow, SLOT(show()));
+    QObject::connect(menu, SIGNAL(closeGame()), mainWindow, SLOT(close()));
 
     return app.exec();
 }
