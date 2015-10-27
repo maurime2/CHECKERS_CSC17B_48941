@@ -1,3 +1,9 @@
+//Richard Shatz
+//CIS 17B
+//Checkers Group Project
+//
+//
+
 #ifndef STARTWINDOW_H
 #define STARTWINDOW_H
 

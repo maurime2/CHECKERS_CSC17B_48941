@@ -1,3 +1,7 @@
+//Richard Shatz
+//CIS 17B
+//Checkers Group
+
 #include <QApplication>
 #include <QSplashScreen>
 #include <QTimer>
