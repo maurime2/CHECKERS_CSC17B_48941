@@ -2,7 +2,7 @@
 #include <QSplashScreen>
 #include <QTimer>
 
-#include "menu.h"
+#include "menudialog.h"
 #include "mainwindow.h"
 
 int main(int argc, char *argv[])
@@ -14,13 +14,13 @@ int main(int argc, char *argv[])
     splash->show();
 
     MainWindow *mainWindow = new MainWindow;
-    Menu *menu = new Menu(mainWindow);
+    MenuDialog *menuDialog = new MenuDialog(mainWindow);
 
     QTimer::singleShot(1000, splash, SLOT(close()));
-    QTimer::singleShot(1000, menu, SLOT(show()));
+    QTimer::singleShot(1000, menuDialog, SLOT(show()));
 
-    QObject::connect(menu, SIGNAL(finished(int)), mainWindow, SLOT(show()));
-    QObject::connect(menu, SIGNAL(closeGame()), mainWindow, SLOT(close()));
+    QObject::connect(menuDialog, SIGNAL(finished(int)), mainWindow, SLOT(show()));
+    QObject::connect(menuDialog, SIGNAL(closeGame()), mainWindow, SLOT(close()));
 
     return app.exec();
 }

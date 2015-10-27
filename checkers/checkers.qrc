@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/background.jpg</file>
+        <file>images/New.png</file>
+        <file>images/Open.png</file>
+        <file>images/Qt.png</file>
+        <file>images/Save.png</file>
+        <file>images/SaveAs.png</file>
+        <file>images/greenSquare.png</file>
+        <file>images/redPiece.png</file>
+        <file>images/Thumbs.db</file>
+        <file>images/whitePiece.png</file>
+        <file>images/whiteSquare.png</file>
+    </qresource>
+</RCC>

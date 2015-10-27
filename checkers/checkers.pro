@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2015-10-21T17:01:43
+# Project created by QtCreator 2015-10-27T11:04:05
 #
 #-------------------------------------------------
 
@@ -14,12 +14,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    menu.cpp
+    menudialog.cpp \
+    board.cpp
 
 HEADERS  += mainwindow.h \
-    menu.h
+    menudialog.h \
+    board.h
 
 RESOURCES += \
     checkers.qrc
-
-OTHER_FILES +=

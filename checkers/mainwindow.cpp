@@ -10,7 +10,7 @@
 #include <QTextStream>
 
 #include "mainwindow.h"
-#include "menu.h"
+#include "menudialog.h"
 
 MainWindow::MainWindow()
 {
@@ -35,9 +35,9 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 {
     if(event->key() == Qt::Key_Escape)
     {
-        Menu *menu = new Menu(this);
-        menu->show();
-        connect(menu, SIGNAL(closeGame()), this, SLOT(close()));
+        MenuDialog *menuDialog = new MenuDialog(this);
+        menuDialog->show();
+        connect(menuDialog, SIGNAL(closeGame()), this, SLOT(close()));
     }
 }
 
