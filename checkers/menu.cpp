@@ -11,17 +11,15 @@ Menu::Menu(QWidget *parent) : QDialog(parent)
     quitButton = new QPushButton("Quit");
     optionsButton = new QPushButton("Options");
 
-    connect(newButton, SIGNAL(clicked()), parent, SLOT(newFile()));
-    connect(newButton, SIGNAL(clicked()), this, SLOT(close()));
+    connect(newButton, SIGNAL(clicked(bool)), parent, SLOT(newFile()));
+    connect(newButton, SIGNAL(clicked(bool)), this, SLOT(close()));
 
-    connect(continueButton, SIGNAL(clicked()), parent, SLOT(open()));
-    connect(continueButton, SIGNAL(clicked()), this, SLOT(close()));
+    connect(continueButton, SIGNAL(clicked(bool)), parent, SLOT(open()));
+    connect(continueButton, SIGNAL(clicked(bool)), this, SLOT(close()));
 
-    connect(loadButton, SIGNAL(clicked()), parent, SLOT(open()));
-    connect(loadButton, SIGNAL(clicked()), this, SLOT(close()));
-
-    connect(quitButton, SIGNAL(clicked()), parent, SLOT(close()));
-    connect(quitButton, SIGNAL(clicked()), this, SLOT(close()));
+    connect(loadButton, SIGNAL(clicked(bool)), parent, SLOT(open()));
+    connect(loadButton, SIGNAL(clicked(bool)), this, SLOT(close()));
+    connect(quitButton, SIGNAL(clicked(bool)), this, SLOT(quitClicked()));
 
     QVBoxLayout *layout = new QVBoxLayout;
 
@@ -41,4 +39,12 @@ Menu::Menu(QWidget *parent) : QDialog(parent)
     backGround.setBrush(this->backgroundRole(),
                   QBrush(QImage(":/images/background.jpg")));
     this->setPalette(backGround);
+}
+
+void Menu::quitClicked()
+{
+    if(this->quitButton)
+    {
+        emit closeGame();
+    }
 }

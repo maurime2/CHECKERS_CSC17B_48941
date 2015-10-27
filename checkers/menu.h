@@ -4,13 +4,22 @@
 #include <QDialog>
 #include <QPushButton>
 
-#include "mainwindow.h"
-
 class Menu : public QDialog
 {
+    Q_OBJECT
+
 public:
 
     Menu(QWidget *parent = 0);
+
+signals:
+
+    void closeGame();
+    void openGame();
+
+private slots:
+
+    void quitClicked();
 
 private:
 
