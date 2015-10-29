@@ -23,8 +23,5 @@ int main(int argc, char *argv[])
     QTimer::singleShot(1000, splash, SLOT(close()));
     QTimer::singleShot(1000, menuDialog, SLOT(show()));
 
-    QObject::connect(menuDialog, SIGNAL(finished(int)), mainWindow, SLOT(show()));
-    QObject::connect(menuDialog, SIGNAL(closeGame()), mainWindow, SLOT(close()));
-
     return app.exec();
 }

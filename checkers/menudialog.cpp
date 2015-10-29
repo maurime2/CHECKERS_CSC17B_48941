@@ -11,6 +11,9 @@ MenuDialog::MenuDialog(QWidget *parent) : QDialog(parent)
     quitButton = new QPushButton("Quit");
     optionsButton = new QPushButton("Options");
 
+    connect(this, SIGNAL(finished(int)), parent, SLOT(show()));
+    connect(this, SIGNAL(closeGame()), parent, SLOT(close()));
+
     connect(newButton, SIGNAL(clicked(bool)), parent, SLOT(newFile()));
     connect(newButton, SIGNAL(clicked(bool)), this, SLOT(close()));
 
@@ -19,6 +22,7 @@ MenuDialog::MenuDialog(QWidget *parent) : QDialog(parent)
 
     connect(loadButton, SIGNAL(clicked(bool)), parent, SLOT(open()));
     connect(loadButton, SIGNAL(clicked(bool)), this, SLOT(close()));
+
     connect(quitButton, SIGNAL(clicked(bool)), this, SLOT(quitClicked()));
 
     QVBoxLayout *layout = new QVBoxLayout;
