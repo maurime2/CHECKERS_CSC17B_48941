@@ -24,8 +24,7 @@ MainWindow::MainWindow()
 
     readSettings();
 
-    connect(textEdit->document(), SIGNAL(contentsChanged()),
-            this, SLOT(documentWasModified()));
+    connect(textEdit->document(), SIGNAL(contentsChanged()), this, SLOT(documentWasModified()));
 
     setCurrentFile("");
     setUnifiedTitleAndToolBarOnMac(true);
