@@ -1,0 +1,12 @@
+INPUT(
+./release/main.o
+./release/mainwindow.o
+./release/menudialog.o
+./release/board.o
+./release/boardsquare.o
+./release/qrc_checkers.o
+./release/moc_mainwindow.o
+./release/moc_menudialog.o
+./release/moc_board.o
+./release/moc_boardsquare.o
+);

@@ -5,7 +5,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QPlainTextEdit> //delete me
+//#include <QPlainTextEdit> //delete me
+
+//#include "board.h"
 
 class MainWindow : public QMainWindow
 {
@@ -22,7 +24,7 @@ protected:
 
 private slots:
 
-    void newFile();
+    void newGame();
     void open();
     bool save();
     bool saveAs();
@@ -43,7 +45,7 @@ private:
     void setCurrentFile(const QString &fileName);
     QString strippedName(const QString &fullFileName);
 
-    QPlainTextEdit *textEdit;
+    //QPlainTextEdit *textEdit;
     QString curFile;
 
     QMenu *fileMenu;

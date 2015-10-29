@@ -14,8 +14,8 @@
 
 MainWindow::MainWindow()
 {
-    textEdit = new QPlainTextEdit;
-    setCentralWidget(textEdit);
+    //textEdit = new QPlainTextEdit;
+    //setCentralWidget(textEdit);
 
     createActions();
     createMenus();
@@ -24,8 +24,12 @@ MainWindow::MainWindow()
 
     readSettings();
 
-    connect(textEdit->document(), SIGNAL(contentsChanged()),
-            this, SLOT(documentWasModified()));
+    // Add the central widget - board
+    //Board *board = new Board;
+    //setCentralWidget(board);
+
+    //connect(textEdit->document(), SIGNAL(contentsChanged()),
+            //this, SLOT(documentWasModified()));
 
     setCurrentFile("");
     setUnifiedTitleAndToolBarOnMac(true);
@@ -36,8 +40,9 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     if(event->key() == Qt::Key_Escape)
     {
         MenuDialog *menuDialog = new MenuDialog(this);
-        menuDialog->show();
         connect(menuDialog, SIGNAL(closeGame()), this, SLOT(close()));
+        menuDialog->show();
+
     }
 }
 
@@ -51,10 +56,10 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
 }
 
-void MainWindow::newFile()
+void MainWindow::newGame()
 {
     if (maybeSave()) {
-        textEdit->clear();
+        //textEdit->clear();
         setCurrentFile("");
     }
 }
@@ -99,17 +104,19 @@ void MainWindow::about()
                "toolbars, and a status bar."));
 }
 
+/*
 void MainWindow::documentWasModified()
 {
     setWindowModified(textEdit->document()->isModified());
 }
+*/
 
 void MainWindow::createActions()
 {
     newAct = new QAction(QIcon(":/images/New.png"), tr("&New"), this);
     newAct->setShortcuts(QKeySequence::New);
     newAct->setStatusTip(tr("Create a new file"));
-    connect(newAct, SIGNAL(triggered()), this, SLOT(newFile()));
+    connect(newAct, SIGNAL(triggered()), this, SLOT(newGame()));
 
     openAct = new QAction(QIcon(":/images/Open.png"), tr("&Open..."), this);
     openAct->setShortcuts(QKeySequence::Open);
@@ -135,19 +142,19 @@ void MainWindow::createActions()
     cutAct->setShortcuts(QKeySequence::Cut);
     cutAct->setStatusTip(tr("Cut the current selection's contents to the "
                             "clipboard"));
-    connect(cutAct, SIGNAL(triggered()), textEdit, SLOT(cut()));
+    //connect(cutAct, SIGNAL(triggered()), textEdit, SLOT(cut()));
 
     copyAct = new QAction(QIcon(":/images/copy.png"), tr("&Copy"), this);
     copyAct->setShortcuts(QKeySequence::Copy);
     copyAct->setStatusTip(tr("Copy the current selection's contents to the "
                              "clipboard"));
-    connect(copyAct, SIGNAL(triggered()), textEdit, SLOT(copy()));
+    //connect(copyAct, SIGNAL(triggered()), textEdit, SLOT(copy()));
 
     pasteAct = new QAction(QIcon(":/images/paste.png"), tr("&Paste"), this);
     pasteAct->setShortcuts(QKeySequence::Paste);
     pasteAct->setStatusTip(tr("Paste the clipboard's contents into the current "
                               "selection"));
-    connect(pasteAct, SIGNAL(triggered()), textEdit, SLOT(paste()));
+    //connect(pasteAct, SIGNAL(triggered()), textEdit, SLOT(paste()));
 
     aboutAct = new QAction(tr("&About"), this);
     aboutAct->setStatusTip(tr("Show the application's About box"));
@@ -159,10 +166,10 @@ void MainWindow::createActions()
 
     cutAct->setEnabled(false);
     copyAct->setEnabled(false);
-    connect(textEdit, SIGNAL(copyAvailable(bool)),
-            cutAct, SLOT(setEnabled(bool)));
-    connect(textEdit, SIGNAL(copyAvailable(bool)),
-            copyAct, SLOT(setEnabled(bool)));
+    //connect(textEdit, SIGNAL(copyAvailable(bool)),
+            //cutAct, SLOT(setEnabled(bool)));
+    //connect(textEdit, SIGNAL(copyAvailable(bool)),
+            //copyAct, SLOT(setEnabled(bool)));
 }
 
 void MainWindow::createMenus()
@@ -221,6 +228,7 @@ void MainWindow::writeSettings()
     settings.setValue("size", size());
 }
 
+/*
 bool MainWindow::maybeSave()
 {
     if (textEdit->document()->isModified()) {
@@ -236,6 +244,7 @@ bool MainWindow::maybeSave()
     }
     return true;
 }
+*/
 
 void MainWindow::loadFile(const QString &fileName)
 {
@@ -252,7 +261,7 @@ void MainWindow::loadFile(const QString &fileName)
 #ifndef QT_NO_CURSOR
     QApplication::setOverrideCursor(Qt::WaitCursor);
 #endif
-    textEdit->setPlainText(in.readAll());
+    //textEdit->setPlainText(in.readAll());
 #ifndef QT_NO_CURSOR
     QApplication::restoreOverrideCursor();
 #endif
@@ -276,7 +285,7 @@ bool MainWindow::saveFile(const QString &fileName)
 #ifndef QT_NO_CURSOR
     QApplication::setOverrideCursor(Qt::WaitCursor);
 #endif
-    out << textEdit->toPlainText();
+    //out << textEdit->toPlainText();
 #ifndef QT_NO_CURSOR
     QApplication::restoreOverrideCursor();
 #endif
@@ -289,7 +298,7 @@ bool MainWindow::saveFile(const QString &fileName)
 void MainWindow::setCurrentFile(const QString &fileName)
 {
     curFile = fileName;
-    textEdit->document()->setModified(false);
+    //textEdit->document()->setModified(false);
     setWindowModified(false);
 
     QString shownName = curFile;

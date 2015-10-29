@@ -1,57 +1,81 @@
-#include <QGridLayout>
-#include <QPainter>
 
 
 #include "board.h"
 
-Board::Board(QWidget *parent) : QWidget(parent)
-{
-    int size=8;
-    QWidget *board= new QWidget;
-    QGridLayout *mainLayout = new QGridLayout;
-    QPixmap whiteImage(":/images/whiteSquare.png");
-    QPixmap greenImage(":/images/greenSquare.png");
+Board::Board(QWidget *parent, Qt::WindowFlags f)
+    : QWidget(parent,f){
+    // Set the default background images
+    lightSquare = new QString(":/images/whiteSquare.png");
+    darkSquare = new QString(":/images/greenSquare.png");
 
-    // Fill the QLabels
+    //playableSquares = new QMap;
+    //nonPlayableSquares = new QMap;
+    // For layout the game board
+    QGridLayout *mainLayout = new QGridLayout;
+
+    // Start the squares at 1
+    int count = 1;
+    int countNonPlay=1;
+    // Set the size of the board to default size
+    int size = DEFAULTSIZE;
+
+    // Fill the squares with default images and add them to the board
     for(int i = 0; i<size; i++){
         for(int j=0; j < size; j++){
-            QLabel *label = new QLabel;
+            // Add and determine whether square will be playable
             if(i%2==0&&j%2==1){
-                label->setPixmap(greenImage);
-                mainLayout->addWidget(label,i,j);
+                BoardSquare *square = new BoardSquare(true,*darkSquare, parent);
+                mainLayout->addWidget(square,i,j);
+                playableSquares.insert(count,square);
+                count++;
             }
             else if(i%2==1&&j%2==0){
-                label->setPixmap(greenImage);
-                mainLayout->addWidget(label,i,j);
+                BoardSquare *square = new BoardSquare(true,*darkSquare, parent);
+                mainLayout->addWidget(square,i,j);
+                playableSquares.insert(count,square);
+                count++;
             }
             else{
-                label->setPixmap(whiteImage);
-                mainLayout->addWidget(label,i,j);
+                // Create a non-playable square
+                BoardSquare *square = new BoardSquare(true, *lightSquare, parent);
+                mainLayout->addWidget(square,i,j);
+                nonPlayableSquares.insert(countNonPlay,square);
+                countNonPlay++;
             }
         }
-
     }
-    //Set a fixed size for the layour
+    // Set the layout to a fixed size so it cannot be resized
     mainLayout->setSizeConstraint(QLayout::SetFixedSize);
 
-    board->setLayout(mainLayout);
-    board->show();
+    // Set the horizontal and vertical spacing between the squares
+    mainLayout->setHorizontalSpacing(0);
+    mainLayout->setVerticalSpacing(0);
 
-//    QString myString(":/images/whiteSquare.png");
-//    QString myString2(":/images/redPiece.png");
-//    QImage mySquare;
-//    mySquare.load(myString);
-//    QImage myCircle;
-//    myCircle.load(myString2);
-//    QWidget *imageWidget = new QWidget;
-//    QHBoxLayout *sampleLayout = new QHBoxLayout;
-//    QPainter painter(&mySquare);
-//    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-//    painter.drawImage(0,0,myCircle);
+    // Set the layout for the board
+    this->setLayout(mainLayout);
+}
 
+// Destructor
+Board::~Board(){
 
-//    imageWidget->setLayout(sampleLayout);
-//    imageWidget->show();
+    // Create iterators to go through the Qmaps
+    QMap<int,BoardSquare*>::iterator i=playableSquares.begin();
+    QMap<int,BoardSquare*>::iterator j=nonPlayableSquares.begin();
 
-    //qDebug() << QSqlDatabase::drivers;
+	// delete the playable and non playable squares
+    while(i!=playableSquares.end()){
+        // Delete the BoardSquare value
+        delete i.value();
+        // Now delete the key
+        i=playableSquares.erase(i);
+    }
+    while(j!=nonPlayableSquares.end()){
+        // Delete the BoardSquare value
+        delete j.value();
+        // Now delete the key
+        j=nonPlayableSquares.erase(j);
+    }
+	// Now delete the Qmaps
+    delete playableSquares;
+    delete nonPlayableSquares;
 }

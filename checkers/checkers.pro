@@ -15,11 +15,14 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     menudialog.cpp \
-    board.cpp
+    board.cpp \
+    boardsquare.cpp
 
 HEADERS  += mainwindow.h \
     menudialog.h \
-    board.h
+    board.h \
+    boardsquare.h \
+    piece.h
 
 RESOURCES += \
     checkers.qrc
