@@ -1,0 +1,10 @@
+Exception: STATUS_INTEGER_DIVIDE_BY_ZERO at eip=00401801
+eax=00000001 ebx=00000000 ecx=0024CC10 edx=00000000 esi=0000002E edi=00000072
+ebp=0024CB78 esp=0024CB60 program=E:\00. C++ Tutorial\Buckey-C-Tutorials\Checkers V.02 - Arrays\dist\Debug\Cygwin-Windows\checkers_v.02_-_arrays, pid 956, thread main
+cs=001B ds=0023 es=0023 fs=003B gs=0000 ss=0023
+Stack trace:
+Frame     Function  Args
+0024CB78  00401801 (00000021, 00000000, 00000020, 0024CB90)
+0024CC58  00401282 (0000002E, 00000072, 0024CD18, 6100842E)
+0024CD18  6100842E (00000000, 0024CD74, 61007530, 00000000)
+End of stack trace
