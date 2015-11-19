@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=Checkers V.02 - Arrays
+PROJECTNAME=Checkers V.03 - Arrays
 
 # Active Configuration
 DEFAULTCONF=Debug
