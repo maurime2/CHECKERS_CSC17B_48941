@@ -354,7 +354,6 @@ int change(int, int, int, int []);  //Change the values in the board
                 if(p1==false){
                    printBoard(SIZE, Board);     //Prints Board 
                 }
-                
             }while(p1==false);//End of User Select
         }//End of Player 1 Select
     }//End of function p1select
