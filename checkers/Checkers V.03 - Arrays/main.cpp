@@ -11,21 +11,21 @@
 using namespace std;
 
 //Function Prototypes: Fill Array
-int fillArray(int, int []);      //Fills Board Array with Zero.
-int fillArray1(int, int, int []);//Fills Board Array with Player 1 Pieces.
-int fillArray2(int, int, int []);//Fills Board Array with Player 1 Pieces.
+void fillArray(int, int []);      //Fills Board Array with Zero.
+void fillArray1(int, int, int []);//Fills Board Array with Player 1 Pieces.
+void fillArray2(int, int, int []);//Fills Board Array with Player 1 Pieces.
 
 //Function Prototypes: Print Board
-int printBoard(int, int []);    //Prints Board w/ Board Array.
-int printTopW(int, int, int []);   //When tile row starts White, Top Part only.
-int printBottomW(int, int, int []);  //When row starts White, Bottom Part only.
-int printTopB(int, int, int []);    //When row starts Black, Top Part only.
-int printBottomB(int, int, int []);//When row starts Black, Bottom Part only.
+void printBoard(int, int []);    //Prints Board w/ Board Array.
+void printTopW(int, int, int []);   //When tile row starts White, Top Part only.
+void printBottomW(int, int, int []);  //When row starts White, Bottom Part only.
+void printTopB(int, int, int []);    //When row starts Black, Top Part only.
+void printBottomB(int, int, int []);//When row starts Black, Bottom Part only.
 
 //Function Prototypes: User Inputs - Select Piece and Move
-int select(int, int, int, int []);      //Prompts User to Select Piece.
-int p1select(int, int, int, int [],bool,bool,bool,bool);      //Prompts User to Select Piece.
-int p2select(int, int, int, int [],bool,bool,bool,bool);      //Prompts User to Select Piece.
+void select(int, int, int, int []);      //Prompts User to Select Piece.
+void p1select(int, int, int, int [],bool,bool,bool,bool);      //Prompts User to Select Piece.
+void p2select(int, int, int, int [],bool,bool,bool,bool);      //Prompts User to Select Piece.
 
 int move(int, int, int, int []);      //Prompts User to Move to a  new Location.
 
@@ -49,36 +49,36 @@ int change(int, int, int, int []);  //Change the values in the board
 
 //Global Variables
 
-//Main Starts Here
-int main(int argc, char** argv) {
-    //Declare Variables
-    int SIZE = 35;          //Array Size.
-    int Index = 0;          //Array Index.
-    int Board[SIZE];       //Array That Holds Board Location and pieces.
-    int piecesTot = 12;   //Holds total value each player starts off with.
-    int player1 = 12;    //Player 1: Starts With 12.
-    int player2 = 12;   //Player 2; Starts With 12.
-    int pmove = 0;      //Holds Location of Desired Move
-    int pieces = 0;   //Holds piece desired to move
-    
-  //Fill Array - Fills Array with board pieces.
-  fillArray (SIZE, Board);  //Fills Board Array with O's [21-32]  
-  fillArray1(SIZE, player1, Board);  //Fills Board Array with O's [21-32]
-  fillArray2(SIZE, player2, Board); //Fills Board Array with X's [ 1-12]
- 
-  //Start Game   
-        printBoard(SIZE, Board);     //Prints Board
-        select(SIZE, pieces, pmove, Board);
-               // move(SIZE, pieces, pmove, Board);   //Call Move Function
+                //Main Starts Here
+                int main(int argc, char** argv) {
+                    //Declare Variables
+                    int SIZE = 35;          //Array Size.
+                    int Index = 0;          //Array Index.
+                    int Board[SIZE];       //Array That Holds Board Location and pieces.
+                    int piecesTot = 12;   //Holds total value each player starts off with.
+                    int player1 = 12;    //Player 1: Starts With 12.
+                    int player2 = 12;   //Player 2; Starts With 12.
+                    int pmove = 0;      //Holds Location of Desired Move
+                    int pieces = 0;   //Holds piece desired to move
 
-    //Exit Stage Right
-    return 0;
-}//Main Ends
+                  //Fill Array - Fills Array with board pieces.
+                  fillArray (SIZE, Board);  //Fills Board Array with O's [21-32]  
+                  fillArray1(SIZE, player1, Board);  //Fills Board Array with O's [21-32]
+                  fillArray2(SIZE, player2, Board); //Fills Board Array with X's [ 1-12]
+
+                  //Start Game   
+                        printBoard(SIZE, Board);     //Prints Board
+                        select(SIZE, pieces, pmove, Board);
+                               // move(SIZE, pieces, pmove, Board);   //Call Move Function
+
+                    //Exit Stage Right
+                    return 0;
+                }//Main Ends
 
 //Functions
 
     //FILL ARRAY FUNCTION
-    int fillArray(int SIZE, int Board []){  //Fills Board Array with Zero
+    void fillArray(int SIZE, int Board []){  //Fills Board Array with Zero
     //Fill Array with Zero
         for(int i=0; i<SIZE;i++){
             Board[i]=0;
@@ -101,7 +101,7 @@ int main(int argc, char** argv) {
     }//END OF: FILL ARRAY FUNCTION
 
     //FILL ARRAY FUNCTION: PLAYER1 - O
-    int fillArray1(int SIZE, int player1, int Board []){  //Fills Board Array with Zero
+    void fillArray1(int SIZE, int player1, int Board []){  //Fills Board Array with Zero
     //Fill Array with Zero
         for(int i=21; i<(SIZE-2);i++){
             Board[i]=1;
@@ -119,7 +119,7 @@ int main(int argc, char** argv) {
     }//END OF: FILL ARRAY FUNCTION: PLAYER1
 
     //FILL ARRAY FUNCTION: PLAYER2 - X
-    int fillArray2(int SIZE, int player2, int Board []){  //Fills Board Array with Zero
+    void fillArray2(int SIZE, int player2, int Board []){  //Fills Board Array with Zero
     //Fill Array with Zero
         for(int i=1; i<player2+1;i++){
             Board[i]=2;
@@ -135,7 +135,7 @@ int main(int argc, char** argv) {
     }//END OF: FILL ARRAY FUNCTION: PLAYER2
 
     //PRINT BOARD
-    int printBoard(int SIZE, int Board []){  //Fills Board Array with Zero
+    void printBoard(int SIZE, int Board []){  //Fills Board Array with Zero
         //Print Line TOP
         for(int i=1;i<SIZE-2;i++){
             //WHITE SPACE START
@@ -173,7 +173,7 @@ int main(int argc, char** argv) {
     }//END OF: PRINT BOARD
 
     //TOP PART OF LINE: WHITE
-    int printTopW(int SIZE, int Col, int Board []){  //Fills Board Array with Zero
+    void printTopW(int SIZE, int Col, int Board []){  //Fills Board Array with Zero
         
         //Blank
         if(Board[Col]==0){
@@ -202,7 +202,7 @@ int main(int argc, char** argv) {
     }//END OF: TOP PART OF LINE: WHITE
 
     //Bottom PART OF LINE
-    int printBottomW(int SIZE, int Col, int Board []){  //Fills Board Array with Zero
+    void printBottomW(int SIZE, int Col, int Board []){  //Fills Board Array with Zero
         //Print Line TOP
         //Blank
         if(Board[Col]==0){
@@ -231,7 +231,7 @@ int main(int argc, char** argv) {
     }//END OF: Bottom PART OF LINE
 
     //TOP PART OF LINE: BLACK
-    int printTopB(int SIZE, int Col, int Board []){  //Fills Board Array with Zero
+    void printTopB(int SIZE, int Col, int Board []){  //Fills Board Array with Zero
         //Print Line TOP
         //Blank
         if(Board[Col]==0){
@@ -252,7 +252,7 @@ int main(int argc, char** argv) {
     }//END OF: TOP PART OF LINE: BLACK
 
     //BOTTOM PART OF LINE: BLACK
-    int printBottomB(int SIZE, int Col, int Board []){  //Fills Board Array with Zero
+    void printBottomB(int SIZE, int Col, int Board []){  //Fills Board Array with Zero
         //Print Line TOP
         //Blank
         if(Board[Col]==0){
@@ -273,7 +273,7 @@ int main(int argc, char** argv) {
     }//END OF: BOTTOM PART OF LINE: BLACK
 
     //Select FUNCTION
-    int select(int SIZE, int pieces, int pmove, int Board []){  //Select Piece
+    void select(int SIZE, int pieces, int pmove, int Board []){  //Select Piece
         //boolian
         bool p1 = false;
         bool p2 = false;
@@ -286,7 +286,7 @@ int main(int argc, char** argv) {
     }//END OF: Player 1: Select FUNCTION
     
     //P1 Select FUNCTION
-    int p1select(int SIZE, int pieces, int pmove, int Board [],bool p1,bool p2,bool kinged,bool eat){  //Select Piece
+    void p1select(int SIZE, int pieces, int pmove, int Board [],bool p1,bool p2,bool kinged,bool eat){  //Select Piece
          if(Board[0]==1){
             do{
                 cout<<"Player 1: Select A Piece?: ";
@@ -326,6 +326,11 @@ int main(int argc, char** argv) {
             }while(p1==false);//End of User Select
         }//End of Player 1 Select
     }//End of function p1select
+    
+    //P2 Select FUNCTION
+    void p2select(int SIZE, int pieces, int pmove, int Board [],bool p1,bool p2,bool kinged,bool eat){  //Select Piece
+    
+    }
     
     //Check Moves
     bool cMoves(int SIZE, int pieces, int pmove, int Board [],bool p1,bool p2,bool kinged, bool eat){  //Checks if piece selected can move
