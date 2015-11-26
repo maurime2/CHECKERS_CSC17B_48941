@@ -1,54 +1,62 @@
 #include "board.h"
-
+#include <QtGlobal>
+#include <QTime>
 
 Board::Board(QWidget *parent) : QWidget(parent)
 {
     QString s;
+
     for (int i = 0; i < 32; i++)
     {
+        // create Tile with board parent. Add tile to vector
         tiles.push_back(new Tile(this));
+        // set tile location to index
         tiles[i]->location = i;
+        // set tile activity enum to NoActivity
         tiles[i]->activity = Tile::NOACTIVITY;
 
-        if (i <12)
+        // set the black piece icons. set tile state to blackpiece
+        if (i < 12)
         {
+
             tiles[i]->setIcon(QIcon(":/images/icons/blackPiece.png"));
             tiles[i]->setIconSize(QSize(30,30));
             tiles[i]->state = Tile::BLACKPIECE;
         }
+        // set red pieces.
         else if (i>19)
         {
             tiles[i]->setIcon(QIcon(":/images/icons/checkersPiece.png"));
             tiles[i]->setIconSize(QSize(30,30));
             tiles[i]->state = Tile::REDPIECE;
         }
-        else if (i == 17)
-        {
-            tiles[i]->setIcon(QIcon(":/images/icons/blackPiece.png"));
-            tiles[i]->setIconSize(QSize(30,30));
-            tiles[i]->state = Tile::BLACKPIECE;
-        }
+        // set black piece to test jumping
+        // set state of all empty tiles to empty
         else
         {
             tiles[i]->state = Tile::EMPTY;
         }
     }
+    // set startSelected to false. indicates that no start tile has been clicked
     startSelected = false;
+    playersTurn = true;
+
+    playerWins = false;
+    jumpOcc = false;
+    // at this point nothing happens until the user clicks
 }
 
 void Board::handleClick(int loc)
-{   
+{
+    playersTurn = true;
     if (setStartLoc(loc))
     {
         // if true then, one of the player's own pieces has been selected and should have been set
         // if not true then the selected tile is either empty or an enemy's. We check for this and act accordingly in a following
         // else statement
-
     }
-    else if (startSelected)
+    else if (startSelected || jumpTurn)
     {
-
-
         // tile selected is either empty or an enemy's piece.
         // check whether or not the tile is an enemy's piece. If it is do nothing.
         // If the tile is empty, check whether or not it is a valid move. If it is a valid move, make move,
@@ -56,11 +64,36 @@ void Board::handleClick(int loc)
         // set start selected to false, unset startLoc and switch to other player's turn.
         if (tileIsEmpty(loc))
         {
+            // checkMove determines whether the move is valid
+            // and if it is, changes the activity enums of each relevant
+            // tile (MOVEDFROM,MOVEDTO...) and returns true, indicating
+            // that a move can be made and will be. makeMove() then
+            // goes through the board and finds the tiles with
+            // MOVEDFROM etc. and
             if(checkMove(startLoc, loc))
             {
-
                 makeMove();
+                if (checkForWin())
+                {
+                    // if win is found set player wins to true which precludes any
+                    // more turns being taken and ends the game
+                    playerWins = true;
+                }
+                else
+                {
+                    if (checkForKing(loc)) updateBoard();
+                }
                 startSelected = false;
+                playersTurn = false;
+                // after making move we wish to start
+                // to the AI's turn. To make it's move
+                // we find all of the available move locations
+                // for each piece and perhaps after checking whether
+                // any of these moves will result in a jump
+                // or a kinging, we pick one at random
+                // make the move, update the board, check for a win
+                // and if no win, switch back to the players turn
+
             }
         }
         else
@@ -68,14 +101,70 @@ void Board::handleClick(int loc)
             // tile selected is an enemy piece and startLoc should remain the same without anything happening
         }
     }
+    // at the end of this loop we check if playerWins is true and if it is we show splash screen,
+    // save game, end game etc.
+    // then we check if jumpTurn is true. if it is then skip changing turns. if not
+    // continue on to the computers turn
+    if (playerWins)
+    {
+        // end/save game, show win screen etc and ask to play another game/return to menu
 
+    }
+    if (!jumpTurn && !playersTurn)
+    {
+       computerTurn();
+    }
+}
+bool Board::checkForWin()
+{
+    int i = 0;
+    while (i < 32)
+    {
+        if (tiles[i]->state == Tile::BLACKPIECE || tiles[i]->state == Tile::BLACKKING)
+        {
+            return false;
+        }
+        i++;
+    }
+    return true;
+}
+bool Board::checkForKing(int loc)
+{
+    if (loc>= 0 && loc < 4 && !(computersMove))
+    {
+        // check that piece is not already king
+        if (tiles[loc]->state != Tile::REDKING)
+        {
+            // update piece.
+            //tiles[loc]->setIcon(QIcon("blackKing.png"));
+            tiles[loc]->state = Tile::REDKING;
+            return true;
+        }
+    }
+    else if (loc >= 28 && loc < 32 && computersMove)
+    {
+        if (tiles[loc]->state != Tile::BLACKKING)
+        {
+            // update piece.
+            //tiles[loc]->setIcon(QIcon("blackKing.png"));
+            tiles[loc]->state = Tile::BLACKKING;
+            return true;
+        }
+    }
+    return false;
 }
 
 bool Board::setStartLoc(int loc)
 {
-    // first we want to determine whether or not the piece is one of the player's own
-    if (tiles[loc]->state == Tile::REDPIECE)
+    if (jumpTurn)
     {
+        return false;
+    }
+    // first we want to determine whether or not the piece is one of the player's own
+    if (tiles[loc]->state == Tile::REDPIECE || tiles[loc]->state == Tile::REDKING)
+    {
+        // && player->color == Player::RED^
+
         // once we determine that the tile is one of the player's own we want
         // to check whether the start location has been set yet.
         if (startSelected)
@@ -174,8 +263,36 @@ bool Board::checkMove(int start, int end)
         tiles[jumpedTile]->activity = Tile::JUMPED;
         madeMove = true;
     }
+    else if (end == backwardLeft(start) && backwardLeftisValid(start))
+    {
+        tiles[start]->activity = Tile::MOVEDFROM;
+        tiles[end]->activity = Tile::MOVEDTO;
+        madeMove = true;
+    }
+    else if (end == backwardRight(start) && backwardRightisValid(start))
+    {
+        tiles[start]->activity = Tile::MOVEDFROM;
+        tiles[end]->activity = Tile::MOVEDTO;
+        madeMove = true;
+    }
+    else if (end == backwardLeftJump(start) && backwardLeftJumpisValid(start))
+    {
+        tiles[start]->activity = Tile::MOVEDFROM;
+        tiles[end]->activity = Tile::MOVEDTO;
+        jumpedTile = start+(3+((start/4))%2);
+        tiles[jumpedTile]->activity = Tile::JUMPED;
+        madeMove = true;
+    }
+    else if (end == backwardRightJump(start) && backwardRightJumpisValid(start))
+    {
+        tiles[start]->activity = Tile::MOVEDFROM;
+        tiles[end]->activity = Tile::MOVEDTO;
+        jumpedTile = start+(4+((start/4)%2));
+        tiles[jumpedTile]->activity = Tile::JUMPED;
+        madeMove = true;
+    }
     return madeMove;
-    
+
 }
 
 void Board::clearMoves()
@@ -188,6 +305,9 @@ void Board::clearMoves()
     */
 }
 
+// fills the moves list with the location/index
+// of each valid move given the start location
+// of loc
 void Board::determineMoves(int loc)
 {
     if (forwardLeftisValid(loc))
@@ -202,7 +322,6 @@ void Board::determineMoves(int loc)
     {
         moves.push_back(loc-9);
     }
-
     if(forwardRightJumpIsValid(loc))
     {
         moves.push_back(loc-7);
@@ -230,13 +349,14 @@ void Board::makeMove()
 {
     // here we want to go through each tile and check it's activity enum; If it is MOVEDTO || MOVEDFROM
     // we save it and
+    jumpOcc = false;
+    jumpTurn = false;
     int startLoc;
     int endLoc;
-    int jumpedLoc;
+    int jumpedLoc,jumpLanding;
     bool jumped = false;
     for (int i = 0; i< 32; i++)
     {
-
         if (tiles[i]->activity == Tile::MOVEDFROM)
         {
             startLoc = i;
@@ -260,7 +380,9 @@ void Board::makeMove()
     {
         tiles[jumpedLoc]->state = Tile::EMPTY;
         tiles[jumpedLoc]->activity = Tile::NOACTIVITY;
-    }
+        jumpOcc = true;
+        jumpLanding = endLoc;
+     }
     // the states have been updated so no we need change the icons.
     updateBoard();
     tiles[startLoc]->activity = Tile::NOACTIVITY;
@@ -268,7 +390,43 @@ void Board::makeMove()
     // once the icons have been changed we need to remove the highlights, and clear the possible moves
     unhighlight();
     clearMoves();
+    if (jumpOcc)
+    {
+        if (checkForJump(jumpLanding))
+        {
+             jumpTurn = true;
+             highlight();
+        }
+
+    }
 }
+bool Board::checkForJump(int loc)
+{
+    bool foundJump = false;
+    if (forwardLeftJumpIsValid(loc))
+    {
+       foundJump = true;
+       moves.push_back(loc-9);
+    }
+    if (forwardRightJumpIsValid(loc))
+    {
+        foundJump = true;
+        moves.push_back(loc-7);
+    }
+    if (backwardLeftJumpisValid(loc) && tiles[loc]->state == Tile::REDKING)
+    {
+        foundJump = true;
+        moves.push_back(loc+7);
+    }
+    if (backwardRightJumpisValid(loc) && tiles[loc]->state == Tile::REDKING)
+    {
+        foundJump = true;
+        moves.push_back(loc+9);
+    }
+    if (foundJump) startLoc = loc;
+    return foundJump;
+}
+
 void Board::kingCheck(int loc)
 {
     // right now this only applies to the red player for whom a kinging
@@ -297,7 +455,7 @@ void Board::updateBoard()
         }
         else if (tiles[i]->state == Tile::REDKING)
         {
-            tiles[i]->setIcon(QIcon(":/images/icons/redKing.jpg"));
+            tiles[i]->setIcon(QIcon(":/images/icons/King.png"));
             tiles[i]->setIconSize(QSize(30,30));
         }
         else if (tiles[i]->state == Tile::BLACKPIECE)
@@ -384,6 +542,46 @@ int Board::forwardRightJump(int loc)
     }
     return -1;
 }
+int Board::backwardLeft(int loc)
+{
+    int moveLoc;
+    if (loc % 8 != 0 && loc < 28)
+    {
+        moveLoc = loc + (3 + ((loc/4)%2));
+        return moveLoc;
+    }
+    return -1;
+}
+int Board::backwardRight(int loc)
+{
+    int moveLoc;
+    if ((loc+1) % 8 != 0 && loc < 28)
+    {
+        moveLoc = loc + (4 + ((loc/4)%2));
+        return moveLoc;
+    }
+    return -1;
+}
+int Board::backwardLeftJump(int loc)
+{
+    int moveLoc;
+    if (loc%4 != 0 && loc < 24)
+    {
+        moveLoc = loc+7;
+        return moveLoc;
+    }
+    return -1;
+}
+int Board::backwardRightJump(int loc)
+{
+    int moveLoc;
+    if ((loc+1)%4 != 0 && loc < 24)
+    {
+        moveLoc = loc + 9;
+        return moveLoc;
+    }
+    return -1;
+}
 
 bool Board::forwardLeftisValid(int start)
 {
@@ -418,18 +616,31 @@ bool Board::forwardLeftJumpIsValid(int start)
     // check that start location is not on two leftmost borders nor two furthest
     if (start%4 != 0 && start > 7)
     {
-        // check that forward left tile is occupied by enemy piece (the piece to be jumped)
-        if ((tiles[start-9]->state==Tile::EMPTY ) && (tiles[start-(5 - ((start/4)%2))]->state==Tile::BLACKPIECE || tiles[start-(5 - ((start/4)%2))]->state==Tile::BLACKKING))
+        if (!computersMove)
         {
+            // check that forward left tile is occupied by enemy piece (the piece to be jumped)
+            if ((tiles[start-9]->state==Tile::EMPTY ) && (tiles[start-(5 - ((start/4)%2))]->state==Tile::BLACKPIECE || tiles[start-(5 - ((start/4)%2))]->state==Tile::BLACKKING))
+            {
                 return true;
+            }
+            return false;
         }
-        return false;
+        else
+        {
+            if ((tiles[start-9]->state==Tile::EMPTY ) && (tiles[start-(5 - ((start/4)%2))]->state==Tile::REDPIECE || tiles[start-(5 - ((start/4)%2))]->state==Tile::REDKING))
+            {
+                return true;
+            }
+            return false;
+        }
     }
     return false;
 }
 bool Board::forwardRightJumpIsValid(int start)
 {
     if ((start+1)%4 != 0 && start > 7)
+    {
+        if (!computersMove)
         {
             if ((tiles[start-7]->state == Tile::EMPTY) && (tiles[start-(4-((start/4)%2))]->state == Tile::BLACKPIECE || tiles[start-(4-((start/4)%2))]->state == Tile::BLACKKING))
             {
@@ -437,11 +648,20 @@ bool Board::forwardRightJumpIsValid(int start)
             }
             return false;
         }
+        else
+        {
+            if ((tiles[start-7]->state == Tile::EMPTY) && (tiles[start-(4-((start/4)%2))]->state == Tile::REDPIECE || tiles[start-(4-((start/4)%2))]->state == Tile::REDKING))
+            {
+                return true;
+            }
+            return false;
+        }
+    }
         return false;
 }
 bool Board::backwardLeftisValid(int start)
 {
-    if (start % 8 != 0 && start < 28 && tiles[start]->state == Tile::REDKING)
+    if (start % 8 != 0 && start < 28 && (tiles[start]->state == Tile::REDKING || computersMove))
     {
         if (tiles[start + (3 + ((start/4)%2))]->state == Tile::EMPTY)
         {
@@ -453,7 +673,7 @@ bool Board::backwardLeftisValid(int start)
 }
 bool Board::backwardRightisValid(int start)
 {
-    if ((start+1) % 8 != 0 && start < 28 && tiles[start]->state == Tile::REDKING)
+    if ((start+1) % 8 != 0 && start < 28 && (tiles[start]->state == Tile::REDKING|| computersMove))
     {
         // check that forward right tile is open
         if (tiles[start + (4 + ((start/4)%2))]->state == Tile::EMPTY)
@@ -466,19 +686,36 @@ bool Board::backwardRightisValid(int start)
 }
 bool Board::backwardLeftJumpisValid(int start)
 {
-    if (start%4 != 0 && start < 24 && tiles[start]->state == Tile::REDKING)
+    if (!computersMove)
     {
-        if ((tiles[start+7]->state==Tile::EMPTY ) && (tiles[start+(3+((start/4)%2))]->state==Tile::BLACKPIECE || tiles[start+(3+((start/4)%2))]->state==Tile::BLACKKING))
+        if (start%4 != 0 && start < 24 && (tiles[start]->state == Tile::REDKING|| computersMove))
         {
-                return true;
+            if ((tiles[start+7]->state==Tile::EMPTY ) && (tiles[start+(3+((start/4)%2))]->state==Tile::BLACKPIECE || tiles[start+(3+((start/4)%2))]->state==Tile::BLACKKING))
+            {
+                    return true;
+            }
+            return false;
         }
-        return false;
     }
+    else
+    {
+        if (start%4 != 0 && start < 24 && (tiles[start]->state == Tile::REDKING|| computersMove))
+        {
+            if ((tiles[start+7]->state==Tile::EMPTY ) && (tiles[start+(3+((start/4)%2))]->state==Tile::REDPIECE || tiles[start+(3+((start/4)%2))]->state==Tile::REDKING))
+            {
+                    return true;
+            }
+            return false;
+        }
+    }
+
     return false;
 }
 bool Board::backwardRightJumpisValid(int start)
 {
-    if ((start+1)%4 != 0 && start < 24 && tiles[start]->state == Tile::REDKING)
+    if ((start+1)%4 != 0 && start < 24 && (tiles[start]->state == Tile::REDKING || computersMove))
+        {
+        if (!computersMove)
         {
             if ((tiles[start+9]->state == Tile::EMPTY) && (tiles[start+(4+((start/4)%2))]->state == Tile::BLACKPIECE || tiles[start+(4+((start/4)%2))]->state == Tile::BLACKKING))
             {
@@ -486,5 +723,147 @@ bool Board::backwardRightJumpisValid(int start)
             }
             return false;
         }
+        else
+        {
+            if ((tiles[start+9]->state == Tile::EMPTY) && (tiles[start+(4+((start/4)%2))]->state == Tile::REDPIECE || tiles[start+(4+((start/4)%2))]->state == Tile::REDKING))
+            {
+                return true;
+            }
+            return false;
+        }
+    }
         return false;
 }
+
+void Board::computerTurn()
+{
+    bool madeMove = false;
+    computersMove = true;
+    QTime time = QTime::currentTime();
+    qsrand((uint)time.msec());
+    QList<int> shuffledTiles;
+    for (int i = 0; i < tiles.size();i++)
+    {
+        shuffledTiles.insert(qrand()%32,i);
+    }
+    // first we check for valid moves. This means for each piece we must find every possible move
+    int i = 0;
+    while (!(madeMove) && i < 32)
+    {
+        //shuffledTiles.insert();
+        // generate set of integers randomly ordered from 0 to 32.
+        // then go through that set and once we find a move, make it.
+        if (tiles[shuffledTiles[i]]->state == Tile::BLACKPIECE || tiles[shuffledTiles[i]]->state == Tile::BLACKKING)
+        {
+            madeMove = determineComputerMoves(shuffledTiles[i]);
+        }
+        i++;
+    }
+
+    computersMove = false;
+}
+bool Board::determineComputerMoves(int i)
+{
+    int start = i;
+    int end,jumpedTile;
+    bool found = false, jump = false;
+    if(backwardLeftJumpisValid(i))
+    {
+        end = i + 7;
+        jumpedTile = start+(3+((start/4))%2);
+        tiles[start]->activity = Tile::MOVEDFROM;
+        tiles[jumpedTile]->activity = Tile::JUMPED;
+        tiles[end]->activity = Tile::MOVEDTO;
+        found = true;
+        jump = true;
+    }
+    else if(backwardRightJumpisValid(i))
+    {
+        end = i+9;
+        jumpedTile = start+(4+((start/4))%2);
+        tiles[jumpedTile]->activity = Tile::JUMPED;
+        tiles[start]->activity = Tile::MOVEDFROM;
+        tiles[end]->activity = Tile::MOVEDTO;
+        found = true;
+        jump = true;
+    }
+    else if(forwardLeftJumpIsValid(i)&& tiles[i]->state == Tile::BLACKKING)
+    {
+        end = i -9;
+        jumpedTile = start-(5-((start/4)%2));
+        tiles[start]->activity = Tile::MOVEDFROM;
+        tiles[end]->activity = Tile::MOVEDTO;
+        tiles[jumpedTile]->activity = Tile::JUMPED;
+        found = true;
+        jump = true;
+    }
+    else if(forwardRightJumpIsValid(i)&& tiles[i]->state == Tile::BLACKKING)
+    {
+        // then we perform backward left jump
+        end = i-7;
+        jumpedTile = start-(4-((start/4)%2));
+
+        tiles[jumpedTile]->activity = Tile::JUMPED;
+        tiles[start]->activity = Tile::MOVEDFROM;
+        tiles[end]->activity = Tile::MOVEDTO;
+
+        found = true;
+        jump = true;
+    }
+    // if no success on jumps go to the other moves
+    else if (forwardLeftisValid(i)&& tiles[i]->state == Tile::BLACKKING)
+    {
+        end = i-(5-(i/4)%2);
+        tiles[start]->activity = Tile::MOVEDFROM;
+        tiles[end]->activity = Tile::MOVEDTO;
+        found = true;
+    }
+    else if (forwardRightisValid(i) && tiles[i]->state == Tile::BLACKKING)
+    {
+        end = i-(4-(i/4)%2);
+        tiles[start]->activity = Tile::MOVEDFROM;
+        tiles[end]->activity = Tile::MOVEDTO;
+        found = true;
+    }
+
+    else if(backwardLeftisValid(i))
+    {
+        // then perform forward right
+        end = i+(3+(i/4)%2);
+        tiles[start]->activity = Tile::MOVEDFROM;
+        tiles[end]->activity = Tile::MOVEDTO;
+        found = true;
+    }
+
+    else if(backwardRightisValid(i))
+    {
+        // perform forward left
+        end = i+(4+(i/4)%2);
+        tiles[start]->activity = Tile::MOVEDFROM;
+        tiles[end]->activity = Tile::MOVEDTO;
+        found = true;
+    }
+    if (found)
+    {
+        tiles[end]->state = tiles[start]->state;
+        tiles[start]->state = Tile::EMPTY;
+        if (jump)
+        {
+            tiles[jumpedTile]->state = Tile::EMPTY;
+            tiles[jumpedTile]->activity = Tile::NOACTIVITY;
+        }
+        highlightCompMoves(start,end);
+        updateBoard();
+        tiles[start]->activity = Tile::NOACTIVITY;
+        tiles[end]->activity = Tile::NOACTIVITY;
+        if (checkForKing(end)) {updateBoard();}
+        return true;
+    }
+   return false;
+}
+
+void Board::highlightCompMoves(int start,int end)
+{
+
+}
+
