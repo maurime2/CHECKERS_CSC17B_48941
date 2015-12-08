@@ -25,3 +25,4 @@ void Tile::emmiter()
     int loc = this->location;
     emit setLocation(loc);
 }
+

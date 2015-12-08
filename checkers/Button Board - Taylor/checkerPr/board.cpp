@@ -40,9 +40,9 @@ Board::Board(QWidget *parent) : QWidget(parent)
     // set startSelected to false. indicates that no start tile has been clicked
     startSelected = false;
     playersTurn = true;
-
     playerWins = false;
     jumpOcc = false;
+    computersMove = false;
     // at this point nothing happens until the user clicks
 }
 
