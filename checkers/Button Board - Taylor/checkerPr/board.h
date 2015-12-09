@@ -17,7 +17,18 @@ public:
     int startLoc;
     int endLoc;
     bool startSelected;
-    
+
+    bool playersTurn;
+    bool computersMove;
+    bool jumpOcc;
+    bool jumpTurn;
+    bool playerWins;
+
+    // functions following move
+    bool checkForWin();
+    bool checkForKing(int loc);
+    bool checkForJump(int loc);
+
     //functions
     bool setStartLoc(int loc);
     void unhighlight();
@@ -51,8 +62,14 @@ public:
     bool backwardLeftJumpisValid(int start);
     bool backwardRightJumpisValid(int start);
 
+    void computerTurn();
+    bool determineComputerMoves(int);
+    void highlightCompMoves(int start, int end);
 
+    // holds list of all available moves
+    // Is filled upon a valid start location being set
     QList<int> moves;
+    QList<int> computerMoves;
 signals:
 
 public slots:

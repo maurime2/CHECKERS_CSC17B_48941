@@ -11,6 +11,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = buttonPractice
 TEMPLATE = app
 
+QMAKE_MAC_SDK = macosx10.11
+
 
 SOURCES += main.cpp\
         mainwindow.cpp \
