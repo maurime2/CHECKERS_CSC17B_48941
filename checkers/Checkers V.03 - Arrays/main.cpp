@@ -25,18 +25,23 @@ void printBottomB(int, int, int []);//When row starts Black, Bottom Part only.
 
 //Function Prototypes: User Inputs - Select Piece and Move
 void select(int, int, int, int [], int []);                      //Prompts User to Select Piece.
-void p1select(int, int, int, int [],bool,bool,bool,bool,int []);//Prompts User to Select Piece.
-void p2select(int, int, int, int [],bool,bool,bool,bool);      //Prompts User to Select Piece.
+void p1select(int, int, int, int [],int [],bool,bool,bool,bool);//Prompts User to Select Piece.
+void p2select(int, int, int, int [],int [],bool,bool,bool,bool);      //Prompts User to Select Piece.
 
 int move(int, int, int, int []);      //Prompts User to Move to a  new Location.
 
 //Function Prototypes: Check Moves and Eats
-bool cMoves(int, int, int, int [],bool ,bool ,bool, bool, int[]);      //Prompts User to Select Piece.
-int timesT(int, bool);
+bool cMoves(int, int, int, int [], int[], bool ,bool ,bool, bool);      //Prompts User to Select Piece.
+int timesT(int, bool);                                                  //counts and updates amount of legal moves
+
 //Empty Space Check
+bool cMin9(int, int, int, int [],bool ,bool, bool);      //Checks For Empty Space 9 down: FOR EAT CHECK
+bool cMin7(int, int, int, int [],bool ,bool, bool);      //Checks For Empty Space 7 down: FOR EAT CHECK
 bool cMin5(int, int, int, int [],bool ,bool, bool);      //Checks For Empty Space 5 down
 bool cMin4(int, int, int, int [],bool ,bool, bool);      //Checks For Empty Space 4 down
 bool cMin3(int, int, int, int [],bool ,bool, bool);      //Checks For Empty Space 3 down
+bool cPlu9(int, int, int, int [],bool ,bool, bool);      //Checks For Empty Space 9 Up: FOR EAT CHECK
+bool cPlu7(int, int, int, int [],bool ,bool, bool);      //Checks For Empty Space 7 Up: FOR EAT CHECK
 bool cPlu5(int, int, int, int [],bool ,bool, bool);      //Checks For Empty Space 5 Up.
 bool cPlu4(int, int, int, int [],bool ,bool, bool);      //Checks For Empty Space 4 Up.
 bool cPlu3(int, int, int, int [],bool ,bool, bool);      //Checks For Empty Space 3 Up.
@@ -60,9 +65,10 @@ int change(int, int, int, int []);  //Change the values in the board
                     int piecesTot = 12;   //Holds total value each player starts off with.
                     int player1 = 12;    //Player 1: Starts With 12.
                     int player2 = 12;   //Player 2; Starts With 12.
-                    int pmove = 0;      //Holds Location of Desired Move
+                    int pmove = 0;     //Holds Location of Desired Move
                     int pieces = 0;   //Holds piece desired to move
-
+                    float t1 = 7.5;
+                    int t2=0,t3=0;
                   //Fill Array - Fills Array with board pieces.
                   fillArray (SIZE, Board,Legal);  //Fills Board Array with O's [21-32]  
                     //fillArray1(SIZE, player1, Board);  //Fills Board Array with O's [21-32]
@@ -73,11 +79,18 @@ int change(int, int, int, int []);  //Change the values in the board
                     select(SIZE, pieces, pmove, Board,Legal);
                                // move(SIZE, pieces, pmove, Board);   //Call Move Function
                     
+                    
+                    //Print Legal moves
+                    cout<<endl<<"Legal Moves in Main:"<<endl;
                     for(int i=1;i<=4;i++){
                         cout<<Legal[i]<<endl;
                     }
                     
-                    
+                        //float to int
+                        t2=t1;
+                        t3=t2+1;
+                        cout<<t1<<": "<<t2<<", "<< t3;
+
                     //Exit Stage Right
                     return 0;
                 }//Main Ends
@@ -313,7 +326,7 @@ int change(int, int, int, int []);  //Change the values in the board
         
         //PLAYER 1 MUST SELECT THEIR OWN PIECE
         if(Board[0]==1){
-        p1select(SIZE, pieces, pmove, Board, p1 , p2 ,kinged ,eat,Legal);
+        p1select(SIZE, pieces, pmove, Board, Legal , p1 , p2 ,kinged ,eat);
         }//end of Player 1 Piece Select
         
         //PLAYER 2 MUST SELECT THEIR OWN PIECE
@@ -321,7 +334,7 @@ int change(int, int, int, int []);  //Change the values in the board
     }//END OF: Player 1: Select FUNCTION
     
     //P1 Select FUNCTION
-    void p1select(int SIZE, int pieces, int pmove, int Board [],bool p1,bool p2,bool kinged,bool eat, int Legal[]){  //Select Piece
+    void p1select(int SIZE, int pieces, int pmove, int Board [], int Legal[] ,bool p1,bool p2,bool kinged,bool eat){  //Select Piece
          if(Board[0]==1){
             do{
                 cout<<"Player 1: Select A Piece?: ";
@@ -345,14 +358,14 @@ int change(int, int, int, int []);  //Change the values in the board
                         cout<<"You have selected a Kinged Piece: "<<pieces<<endl;
                         kinged = true;
                         p2= false;
-                        p1=cMoves(SIZE,pieces,pmove,Board,p1,p2,kinged,eat,Legal);
+                        p1=cMoves(SIZE,pieces,pmove,Board,Legal,p1,p2,kinged,eat);
                         //Check Eat
                     }//End of Players Piece
                     else if(Board[pieces]==1){
                         cout<<"You have selected Single Piece: "<<pieces<<endl;
                         kinged = false;
                         p2= false;
-                        p1=cMoves(SIZE,pieces,pmove,Board,p1,p2,kinged,eat,Legal);
+                        p1=cMoves(SIZE,pieces,pmove,Board,Legal,p1,p2,kinged,eat);
                         //Check Eat
                     }//End of Player Piece Else If
                 
@@ -365,11 +378,11 @@ int change(int, int, int, int []);  //Change the values in the board
     }//End of function p1select
     
     //P2 Select FUNCTION
-    void p2select(int SIZE, int pieces, int pmove, int Board [],bool p1,bool p2,bool kinged,bool eat){  //Select Piece
+    void p2select(int SIZE, int pieces, int pmove, int Board [],int Legal [], bool p1,bool p2,bool kinged,bool eat){  //Select Piece
     
     }
     
-    //Times True - Checks how many times Moves are true
+    //Times True - Checks how many times Moves are true [MAX 4], but realy its [MAX 3]
     int timesT(int tTrue, bool p){
         if(p){
             //cout<<"ttrue in function is: "<<tTrue<<endl;
@@ -381,12 +394,17 @@ int change(int, int, int, int []);  //Change the values in the board
     }//End tTrue Function
     
     //Check Moves
-    bool cMoves(int SIZE, int pieces, int pmove, int Board [],bool p1,bool p2,bool kinged, bool eat, int Legal[]){  //Checks if piece selected can move
+    bool cMoves(int SIZE, int pieces, int pmove, int Board [],int Legal[] ,bool p1,bool p2,bool kinged, bool eat){  //Checks if piece selected can move
         //Check Player 1 Moves
-        int tTrue = 0;
-        int c=0;
+        int tTrue = 0;                       //PLEASE NOTE:
+        int c=0;                            //THIS VARIABLE WILL DETERMINE WHERE LEGAL MOVES ARE WRITTEN IN LEGAL ARRAY 
+        
+        //Player 1
+        if((Board[pieces]==1)||(Board[pieces]==3)){
             //Player 1: Single Piece Check
+            cout<<"in check"<<endl;
             if((Board[pieces]==1)){
+                cout<<"in check2"<<endl;
                     //OUTER PIECES - Check For Outer Pieces
                     if((pieces==9)||(pieces==17)||(pieces==25)||
                        (pieces==8)||(pieces==16)||(pieces==24)||(pieces==32)){
@@ -408,8 +426,8 @@ int change(int, int, int, int []);  //Change the values in the board
                             }
                     }//End Outer Pieces Check
 
-                    //Check For Inner Pieces: 4 and 3 spaces behind
-                    if((pieces==5) ||(pieces==6) ||(pieces==7)||
+                    //Check For Inner Pieces: 4 and 3 spaces behind:    BLOCK
+                    else if((pieces==5) ||(pieces==6) ||(pieces==7)||
                        (pieces==13)||(pieces==14)||(pieces==15)||
                        (pieces==21)||(pieces==22)||(pieces==23)||
                        (pieces==29)||(pieces==30)||(pieces==31)){
@@ -430,8 +448,8 @@ int change(int, int, int, int []);  //Change the values in the board
                         }
                     }//End of Inner Pieces Check: 4 & 3
 
-                    //Check For Inner Pieces: 5 and 4 spaces Behind
-                    if((pieces==10)||(pieces==11)||(pieces==12)
+                    //Check For Inner Pieces: 5 and 4 spaces Behind     :TRIANGLE
+                    else if((pieces==10)||(pieces==11)||(pieces==12)
                             ||(pieces==18)||(pieces==19)||(pieces==20)
                             ||(pieces==26)||(pieces==27)||(pieces==28)){
                                 cout<<endl<<"Inner ";
@@ -452,8 +470,9 @@ int change(int, int, int, int []);  //Change the values in the board
                     }//End of Inner Pieces Check: 5 & 4
             }//End Of Single Player 1 Pieces Check
             
-            //Check Player 1: Kinged Pieces TOP OF BOARD
-            if(Board[pieces]==3){
+            //Check Player 1: Kinged Pieces TOP OF BOARD            :
+            else if((Board[pieces]==3)){
+                cout<<"in check2k"<<endl;
                     //OUTER PIECES - Check For Outer Pieces
                     if((pieces==9)||(pieces==17)||(pieces==25)||
                        (pieces==8)||(pieces==16)||(pieces==24)){
@@ -475,8 +494,8 @@ int change(int, int, int, int []);  //Change the values in the board
                             }
                     }//End Outer Pieces Check
 
-                    //OUTER PIECES - Check For Outer Pieces
-                    if((pieces==2)||(pieces==3)||(pieces==4)){
+                    //OUTER PIECES - Check For Outer Pieces     : SPIRAL
+                    else if((pieces==2)||(pieces==3)||(pieces==4)){
                             cout<<endl<<"Top ";
                         //Check If Outer Pieces have Legal Moves
                             //Outer +4
@@ -495,12 +514,12 @@ int change(int, int, int, int []);  //Change the values in the board
                             }
                     }//End Outer Pieces Check
 
-                    //Player 1: Kinged Legal Check BOTTOM: +4
+                    //Player 1: Kinged Legal Check BOTTOM: +4       : STAR
                     else if((pieces==32)){
                         cout<<endl<<"Kinged Bottom ";
                     //Kinged: 1 way check
                          //Check 4 spaces Ahead
-                            p1=cPlu4(SIZE, pieces,pmove, Board,p1,kinged,eat);
+                            p1=cMin4(SIZE, pieces,pmove,Board,p1,kinged,eat);
                             tTrue = timesT(tTrue,p1);
                             if(p1){
                             c++;
@@ -521,11 +540,11 @@ int change(int, int, int, int []);  //Change the values in the board
                             }
                     }
 
-                    //Player 1: Kinged Legal Check  INNER: -4,-3 && +4,+5.
+                    //Player 1: Kinged Legal Check  INNER: -4,-3 && +4,+5. : SQUARE
                     else if((pieces==5)||(pieces==6)||(pieces==7)||
-                       (pieces==13)||(pieces==14)||(pieces==15)||
-                       (pieces==21)||(pieces==22)||(pieces==23)){
-                                cout<<endl<<"Kinged Inner ";
+                            (pieces==13)||(pieces==14)||(pieces==15)||
+                            (pieces==21)||(pieces==22)||(pieces==23)){
+                            cout<<endl<<"Kinged Inner ";
                         //Kinged: 4 way check
                             //Check 4 spaces Behind 
                             p1=cMin4(SIZE, pieces,pmove, Board,p1,kinged,eat);
@@ -557,12 +576,12 @@ int change(int, int, int, int []);  //Change the values in the board
                             }
                     }
 
-                    //Player 1: Kinged Legal Check: -5,-4 && +3,+4.
+                    //Player 1: Kinged Legal Check: -5,-4 && +3,+4. :TRIANGLE
                     else if((pieces==10)||(pieces==11)||(pieces==12)||
-                       (pieces==18)||(pieces==19)||(pieces==20)||
-                       (pieces==26)||(pieces==27)||(pieces==28)){
-                                cout<<endl<<"Kinged Inner ";
-                        //Kinged: 2 way check
+                            (pieces==18)||(pieces==19)||(pieces==20)||
+                            (pieces==26)||(pieces==27)||(pieces==28)){
+                            cout<<endl<<"Kinged Inner ";
+                        //Kinged: 4 way check
                             //Check 5 spaces Behind 
                             p1=cMin5(SIZE, pieces,pmove, Board,p1,kinged,eat);
                             tTrue = timesT(tTrue,p1);
@@ -612,25 +631,13 @@ int change(int, int, int, int []);  //Change the values in the board
                             Legal[c]= pieces-3;
                             }
                     }
-                    
-                    //Player 1: Kinged Legal Check Bottom: -4 && -3,
-                    else if((pieces==32)){
-                                cout<<endl<<"Kinged Bottom ";
-                        //Kinged: 2 way check
-                            //Check 4 spaces Behind
-                            p1=cMin4(SIZE, pieces,pmove, Board,p1,kinged,eat);
-                            tTrue = timesT(tTrue,p1);
-                            if(p1){
-                            c++;
-                            Legal[c]= pieces-4;
-                            }
-                    }
-         }//End Check Player 1: Kinged Pieces.
+            }//End Check Player 1: Kinged Pieces.
+        
             //tTrue Print and final Check
             cout<<"tTrue is: "<<tTrue<<endl;
             //Return Result
             if(tTrue>0){
-                cout<<pieces<<" has "<< tTrue<< " legal moves at: "<<endl; 
+                cout<<pieces<<" has "<< tTrue<< " legal moves at: "; 
                 for(int i=1;i<=4;i++){
                     if(Legal[i]!=0){
                         cout<<Legal[i]<<" ";
@@ -642,6 +649,10 @@ int change(int, int, int, int []);  //Change the values in the board
             else{
                 return p1=false;
             }
+
+        
+        }//end of Player 1 Check
+        
     }//End Check Moves
     
     //Check Eat
@@ -650,13 +661,33 @@ int change(int, int, int, int []);  //Change the values in the board
     }
     
     //Check Move Functions
+        //Check Minus 9
+        bool cMin9(int SIZE, int pieces, int pmove, int Board [],bool p,bool kinged, bool eat){  //Checks if piece selected can move
+                        //Check 9
+                        if(Board[pieces-9]==0){
+                            cout<<"Is Empty"<<pieces-5<<endl;
+                            return true;
+                        }//End Legal Check If Statement: 9 spaces Behind.
+                        return false;
+        }
+
+        //Check Minus 7
+        bool cMin7(int SIZE, int pieces, int pmove, int Board [],bool p,bool kinged, bool eat){  //Checks if piece selected can move
+                        //Check 7
+                        if(Board[pieces-7]==0){
+                            cout<<"Is Empty"<<pieces-5<<endl;
+                            return true;
+                        }//End Legal Check If Statement: 7 spaces Behind.
+                        return false;
+        }
+        
         //Check Minus 5
         bool cMin5(int SIZE, int pieces, int pmove, int Board [],bool p,bool kinged, bool eat){  //Checks if piece selected can move
                         //Check 5
                         if(Board[pieces-5]==0){
                             cout<<"Piece Has Legal Move: "<<pieces-5<<endl;
                             return true;
-                        }//End Legal Check If Statement: 4 spaces Behind.
+                        }//End Legal Check If Statement: 5 spaces Behind.
                         return false;
         }
 
@@ -666,7 +697,7 @@ int change(int, int, int, int []);  //Change the values in the board
                          if(Board[pieces-4]==0){
                             cout<<"Piece Has Legal Move: "<<pieces-4<<endl;
                             return true;
-                        }//End Legal Check If Statement: 3 Spaces Behind.
+                        }//End Legal Check If Statement: 4 Spaces Behind.
                          return false;
         }
 
@@ -680,14 +711,33 @@ int change(int, int, int, int []);  //Change the values in the board
                          return false;
         }
 
+        //Check Plus 9
+        bool cPlu9(int SIZE, int pieces, int pmove, int Board [],bool p,bool kinged, bool eat){  //Checks if piece selected can move
+                         //Check 5 spaces Behind 
+                         if(Board[pieces+9]==0){
+                            cout<<(pieces+9)<<"Is Empty."<<pieces+5<<endl;
+                            return true;
+                        }//End Legal Check If Statement: 9 Spaces Behind.
+                         return false;
+        }
 
+        //Check Plus 7
+        bool cPlu7(int SIZE, int pieces, int pmove, int Board [],bool p,bool kinged, bool eat){  //Checks if piece selected can move
+                         //Check 5 spaces Behind 
+                         if(Board[pieces+7]==0){
+                            cout<<(pieces+7)<<"Is Empty."<<pieces+5<<endl;
+                            return true;
+                        }//End Legal Check If Statement: 7 Spaces Behind.
+                         return false;
+        }
+        
         //Check Plus 5
         bool cPlu5(int SIZE, int pieces, int pmove, int Board [],bool p,bool kinged, bool eat){  //Checks if piece selected can move
                          //Check 5 spaces Behind 
                          if(Board[pieces+5]==0){
                             cout<<"Piece Has Legal Move: "<<pieces+5<<endl;
                             return true;
-                        }//End Legal Check If Statement: 3 Spaces Behind.
+                        }//End Legal Check If Statement: 5 Spaces Behind.
                          return false;
         }
 
@@ -697,7 +747,7 @@ int change(int, int, int, int []);  //Change the values in the board
                          if(Board[pieces+4]==0){
                             cout<<"Piece Has Legal Move: "<<pieces+4<<endl;
                             return true;
-                        }//End Legal Check If Statement: 3 Spaces Behind.
+                        }//End Legal Check If Statement: 4 Spaces Behind.
                          return false;
         }
 
@@ -710,12 +760,12 @@ int change(int, int, int, int []);  //Change the values in the board
                         }//End Legal Check If Statement: 3 Spaces Behind.
                          return false;
         }
-        
+
     //MOVE FUNCTION
     int move(int SIZE, int pieces, int pmove, int Board []){  //Fills Board Array with Zero
-    
+
     }//END OF: MOVE FUNCTION
-    
+
     //MOVE FUNCTION
     int change(int SIZE, int pieces, int pmove, int Board []){  //Fills Board Array with Zero
         int temp = 0;
