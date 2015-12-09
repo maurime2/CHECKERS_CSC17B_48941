@@ -653,6 +653,258 @@ int change(int, int, int, int []);  //Change the values in the board
         
         }//end of Player 1 Check
         
+        //Player 2 Check
+        if((Board[pieces]==2)||(Board[pieces]==4)){
+        //Player 2: Single Piece Check
+            if((Board[pieces]==2)){
+                cout<<"in check2"<<endl;
+                    //OUTER PIECES - Check For Outer Pieces
+                    if((pieces==9)||(pieces==17)||(pieces==25)||
+                       (pieces==8)||(pieces==16)||(pieces==24)||(pieces==32)){
+                            cout<<endl<<"Outer ";
+                        //Check If Outer Pieces have Legal Moves
+                            //Outer -4
+                            p1=cMin4(SIZE, pieces,pmove, Board,p1,kinged,eat);
+                            tTrue = timesT(tTrue,p1);
+                            if(p1){
+                               c++;
+                               Legal[c]= pieces-4;
+                            }
+                            //Outer +4
+                            p1=cPlu4(SIZE, pieces,pmove, Board,p1,kinged,eat);
+                            tTrue = timesT(tTrue,p1);
+                            if(p1){
+                               c++;
+                               Legal[c]= pieces+4;
+                            }
+                    }//End Outer Pieces Check
+
+                    //Check For Inner Pieces: 4 and 3 spaces behind:    BLOCK
+                    else if((pieces==5) ||(pieces==6) ||(pieces==7)||
+                       (pieces==13)||(pieces==14)||(pieces==15)||
+                       (pieces==21)||(pieces==22)||(pieces==23)||
+                       (pieces==29)||(pieces==30)||(pieces==31)){
+                            cout<<endl<<"Inner ";
+                        //Check 4 spaces Behind 
+                        p1=cMin4(SIZE, pieces,pmove, Board,p1,kinged,eat);
+                        tTrue = timesT(tTrue,p1);
+                        if(p1){
+                           c++;
+                           Legal[c]= pieces-4;
+                        }
+                        //Check 3 spaces Behind 
+                        p1=cMin3(SIZE, pieces,pmove, Board,p1,kinged,eat);
+                        tTrue = timesT(tTrue,p1);
+                        if(p1){
+                           c++;
+                           Legal[c]= pieces-3;
+                        }
+                    }//End of Inner Pieces Check: 4 & 3
+
+                    //Check For Inner Pieces: 5 and 4 spaces Behind     :TRIANGLE
+                    else if((pieces==10)||(pieces==11)||(pieces==12)
+                            ||(pieces==18)||(pieces==19)||(pieces==20)
+                            ||(pieces==26)||(pieces==27)||(pieces==28)){
+                                cout<<endl<<"Inner ";
+                        //Check 5 spaces Behind
+                        p1=cMin5(SIZE, pieces,pmove, Board,p1,kinged,eat);
+                        tTrue = timesT(tTrue,p1);
+                        if(p1){
+                           c++;
+                           Legal[c]= pieces-5;
+                        }
+                        //Check 4 spaces Behind 
+                        p1=cMin4(SIZE, pieces,pmove, Board,p1,kinged,eat);
+                        tTrue = timesT(tTrue,p1);
+                        if(p1){
+                           c++;
+                           Legal[c]= pieces-4;
+                        }
+                    }//End of Inner Pieces Check: 5 & 4
+            }//End Of Single Player 2 Pieces Check
+            
+            //Check Player 2: Kinged Pieces TOP OF BOARD            :
+            else if((Board[pieces]==4)){
+                cout<<"in check2k"<<endl;
+                    //OUTER PIECES - Check For Outer Pieces
+                    if((pieces==9)||(pieces==17)||(pieces==25)||
+                       (pieces==8)||(pieces==16)||(pieces==24)){
+                            cout<<endl<<"Outer ";
+                        //Check If Outer Pieces have Legal Moves
+                            //Outer -4
+                            p1=cMin4(SIZE, pieces,pmove, Board,p1,kinged,eat);
+                            tTrue = timesT(tTrue,p1);
+                            if(p1){
+                               c++;
+                               Legal[c]= pieces-4;
+                            }
+                            //Outer +4
+                            p1=cPlu4(SIZE, pieces,pmove, Board,p1,kinged,eat);
+                            tTrue = timesT(tTrue,p1);
+                            if(p1){
+                               c++;
+                               Legal[c]= pieces+4;
+                            }
+                    }//End Outer Pieces Check
+
+                    //OUTER PIECES - Check For Outer Pieces     : SPIRAL
+                    else if((pieces==2)||(pieces==3)||(pieces==4)){
+                            cout<<endl<<"Top ";
+                        //Check If Outer Pieces have Legal Moves
+                            //Outer +4
+                            p1=cPlu4(SIZE, pieces,pmove, Board,p1,kinged,eat);
+                            tTrue = timesT(tTrue,p1);
+                            if(p1){
+                               c++;
+                               Legal[c]= pieces+4;
+                            }
+                            //Outer +3
+                            p1=cPlu3(SIZE, pieces,pmove, Board,p1,kinged,eat);
+                            tTrue = timesT(tTrue,p1);
+                            if(p1){
+                               c++;
+                               Legal[c]= pieces+3;
+                            }
+                    }//End Outer Pieces Check
+
+                    //Player 2: Kinged Legal Check BOTTOM: +4       : STAR
+                    else if((pieces==32)){
+                        cout<<endl<<"Kinged Bottom ";
+                    //Kinged: 1 way check
+                         //Check 4 spaces Ahead
+                            p1=cMin4(SIZE, pieces,pmove,Board,p1,kinged,eat);
+                            tTrue = timesT(tTrue,p1);
+                            if(p1){
+                            c++;
+                            Legal[c]= pieces+4;
+                            }
+                    }
+
+                    //Player 2: Kinged Legal Check TOP: +4
+                    else if((pieces==1)){
+                        cout<<endl<<"Kinged Top ";
+                        //Kinged: 1 way check
+                            //Check 4 spaces Ahead
+                            p1=cPlu4(SIZE, pieces,pmove, Board,p1,kinged,eat);
+                            tTrue = timesT(tTrue,p1);
+                            if(p1){
+                            c++;
+                            Legal[c]= pieces+4;
+                            }
+                    }
+
+                    //Player 2: Kinged Legal Check  INNER: -4,-3 && +4,+5. : SQUARE
+                    else if((pieces==5)||(pieces==6)||(pieces==7)||
+                            (pieces==13)||(pieces==14)||(pieces==15)||
+                            (pieces==21)||(pieces==22)||(pieces==23)){
+                            cout<<endl<<"Kinged Inner ";
+                        //Kinged: 4 way check
+                            //Check 4 spaces Behind 
+                            p1=cMin4(SIZE, pieces,pmove, Board,p1,kinged,eat);
+                            tTrue = timesT(tTrue,p1);
+                            if(p1){
+                            c++;
+                            Legal[c]= pieces-4;
+                            }
+                            //Check 3 spaces Behind 
+                            p1=cMin3(SIZE, pieces,pmove, Board,p1,kinged,eat);
+                            tTrue = timesT(tTrue,p1);
+                            if(p1){
+                            c++;
+                            Legal[c]= pieces-3;
+                            }
+                            //Check 5 spaces Ahead
+                            p1=cPlu5(SIZE, pieces,pmove, Board,p1,kinged,eat);
+                            tTrue = timesT(tTrue,p1);
+                            if(p1){
+                            c++;
+                            Legal[c]= pieces+5;
+                            }
+                            //Check 4 spaces Ahead 
+                            p1=cPlu4(SIZE, pieces,pmove, Board,p1,kinged,eat);
+                            tTrue = timesT(tTrue,p1);
+                            if(p1){
+                            c++;
+                            Legal[c]= pieces+4;
+                            }
+                    }
+
+                    //Player 2: Kinged Legal Check: -5,-4 && +3,+4. :TRIANGLE
+                    else if((pieces==10)||(pieces==11)||(pieces==12)||
+                            (pieces==18)||(pieces==19)||(pieces==20)||
+                            (pieces==26)||(pieces==27)||(pieces==28)){
+                            cout<<endl<<"Kinged Inner ";
+                        //Kinged: 4 way check
+                            //Check 5 spaces Behind 
+                            p2=cMin5(SIZE, pieces,pmove, Board,p2,kinged,eat);
+                            tTrue = timesT(tTrue,p2);
+                            if(p2){
+                            c++;
+                            Legal[c]= pieces-5;
+                            }
+                            //Check 4 spaces Behind 
+                            p2=cMin4(SIZE, pieces,pmove, Board,p2,kinged,eat);
+                            tTrue = timesT(tTrue,p2);
+                            if(p2){
+                            c++;
+                            Legal[c]= pieces-4;
+                            }
+                             //Check 3 spaces Ahead
+                            p2=cPlu3(SIZE, pieces,pmove, Board,p2,kinged,eat);
+                            tTrue = timesT(tTrue,p2);
+                            if(p2){
+                            c++;
+                            Legal[c]= pieces+3;
+                            }
+                            //Check 4 spaces Behind 
+                            p2=cPlu4(SIZE, pieces,pmove, Board,p2,kinged,eat);
+                            tTrue = timesT(tTrue,p2);
+                            if(p2){
+                            c++;
+                            Legal[c]= pieces+4;
+                            }
+                    }
+
+                    //Player 2: Kinged Legal Check Bottom: -4 && -3,
+                    else if((pieces==29)||(pieces==30)||(pieces==31)){
+                                cout<<endl<<"Kinged Bottom ";
+                        //Kinged: 2 way check
+                            //Check 4 spaces Behind
+                            p2=cMin4(SIZE, pieces,pmove, Board,p2,kinged,eat);
+                            tTrue = timesT(tTrue,p2);
+                            if(p2){
+                            c++;
+                            Legal[c]= pieces-4;
+                            }
+                            //Check 3 spaces Behind
+                            p2=cMin3(SIZE, pieces,pmove, Board,p2,kinged,eat);
+                            tTrue = timesT(tTrue,p2);
+                            if(p2){
+                            c++;
+                            Legal[c]= pieces-3;
+                            }
+                    }
+            }//End Check Player 2: Kinged Pieces.
+        
+            //tTrue Print and final Check
+            cout<<"tTrue is: "<<tTrue<<endl;
+            //Return Result
+            if(tTrue>0){
+                cout<<pieces<<" has "<< tTrue<< " legal moves at: "; 
+                for(int i=1;i<=4;i++){
+                    if(Legal[i]!=0){
+                        cout<<Legal[i]<<" ";
+                    }
+                }
+                cout<<endl;
+                return p2=true;
+            }
+            else{
+                return p2=false;
+            }
+
+        
+        }//End Player 2 Check
     }//End Check Moves
     
     //Check Eat
