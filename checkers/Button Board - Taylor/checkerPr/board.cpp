@@ -5,7 +5,6 @@
 Board::Board(QWidget *parent) : QWidget(parent)
 {
     QString s;
-
     for (int i = 0; i < 32; i++)
     {
         // create Tile with board parent. Add tile to vector
@@ -37,6 +36,53 @@ Board::Board(QWidget *parent) : QWidget(parent)
             tiles[i]->state = Tile::EMPTY;
         }
     }
+
+    QString n1;
+    QString n2;
+    QString n;
+    for (int j = 0; j < 32; j++)
+    {
+        switch (j/4)
+        {
+        case 0: n1 = "A";
+            break;
+        case 1: n1 = "B";
+            break;
+        case 2: n1 = "C";
+            break;
+        case 3: n1 = "D";
+            break;
+        case 4: n1 = "E";
+            break;
+        case 5: n1 = "F";
+            break;
+        case 6: n1 = "G";
+            break;
+        case 7: n1 = "H";
+            break;
+        }
+        switch ((j - ((j/4)*4))*2 + (j/4)%2)
+        {
+        case 0: n2 = "1";
+            break;
+        case 1: n2 = "2";
+            break;
+        case 2: n2 = "3";
+            break;
+        case 3: n2 = "4";
+            break;
+        case 4: n2 = "5";
+            break;
+        case 5: n2 = "6";
+            break;
+        case 6: n2 = "7";
+            break;
+        case 7: n2 = "8";
+            break;
+        }
+        n = n1+n2;
+        moveNames.push_back(n);
+    }
     // set startSelected to false. indicates that no start tile has been clicked
     startSelected = false;
     playersTurn = true;
@@ -44,6 +90,8 @@ Board::Board(QWidget *parent) : QWidget(parent)
     jumpOcc = false;
     computersMove = false;
     // at this point nothing happens until the user clicks
+    QObject::connect(this, SIGNAL(updateLastMoves(QString,QString)), parent, SLOT(updateLastMove(QString,QString)));
+
 }
 
 void Board::handleClick(int loc)
@@ -72,6 +120,9 @@ void Board::handleClick(int loc)
             // MOVEDFROM etc. and
             if(checkMove(startLoc, loc))
             {
+                lastMovePlayer = moveNames[startLoc]+ " -> "+moveNames[loc];
+                // here we need to send this string to mainWindow so that the enemy label
+                // may be updated with last move.
                 makeMove();
                 if (checkForWin())
                 {
@@ -239,6 +290,7 @@ bool Board::checkMove(int start, int end)
         // set start to MOVEDFROM, end to MOVEDTO.
         tiles[start]->activity = Tile::MOVEDFROM;
         tiles[end]->activity = Tile::MOVEDTO;
+
         madeMove = true;
     }
     else if (end == forwardRight(start) && forwardRightisValid(start))
@@ -857,6 +909,7 @@ bool Board::determineComputerMoves(int i)
         tiles[start]->activity = Tile::NOACTIVITY;
         tiles[end]->activity = Tile::NOACTIVITY;
         if (checkForKing(end)) {updateBoard();}
+        lastMoveEnemy = moveNames[start] + " -> " + moveNames[end];
         return true;
     }
    return false;
@@ -867,3 +920,7 @@ void Board::highlightCompMoves(int start,int end)
 
 }
 
+void Board::em()
+{
+    emit updateLastMoves(lastMovePlayer,lastMoveEnemy);
+}

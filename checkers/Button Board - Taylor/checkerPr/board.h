@@ -24,6 +24,9 @@ public:
     bool jumpTurn;
     bool playerWins;
 
+    QString lastMovePlayer;
+    QString lastMoveEnemy;
+
     // functions following move
     bool checkForWin();
     bool checkForKing(int loc);
@@ -70,10 +73,12 @@ public:
     // Is filled upon a valid start location being set
     QList<int> moves;
     QList<int> computerMoves;
+    QList<QString> moveNames;
 signals:
-
+    void updateLastMoves(QString,QString);
 public slots:
     void handleClick(int loc);
+    void em();                  //emitter
 
 };
 

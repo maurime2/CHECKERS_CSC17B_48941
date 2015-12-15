@@ -15,6 +15,7 @@ Tile::Tile(QWidget *parent) :  QPushButton(parent)
     //set tile activity enum
 
     QObject::connect(this, SIGNAL(clicked(bool)), this, SLOT(emmiter()));
+    QObject::connect(this, SIGNAL(clicked(bool)), parent, SLOT(em()));
     QObject::connect(this, SIGNAL(setLocation(int)), parent, SLOT(handleClick(int)));
 
 }
