@@ -1,26 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<!-- Written by QtCreator 3.5.0, 2015-11-27T22:44:26. -->
+<!-- Written by QtCreator 3.5.0, 2015-12-15T17:27:59. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
   <value type="QByteArray">{83a28160-a2f4-48aa-95e3-c5f5b3f0bf52}</value>
-=======
-<!-- Written by QtCreator 3.5.0, 2015-11-25T19:26:22. -->
-<qtcreator>
- <data>
-  <variable>EnvironmentId</variable>
-  <value type="QByteArray">{04dbc16b-1304-4064-9a17-2a06a85f55bd}</value>
->>>>>>> origin/master
-=======
-<!-- Written by QtCreator 3.5.0, 2015-11-25T19:26:22. -->
-<qtcreator>
- <data>
-  <variable>EnvironmentId</variable>
-  <value type="QByteArray">{04dbc16b-1304-4064-9a17-2a06a85f55bd}</value>
->>>>>>> origin/master
  </data>
  <data>
   <variable>ProjectExplorer.Project.ActiveTarget</variable>
@@ -255,18 +239,8 @@
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">checkers</value>
-<<<<<<< HEAD
-<<<<<<< HEAD
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:/Users/taylorward/Desktop/CHECKERS_CSC17B_48941/checkers/checkers.pro</value>
-=======
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">checkers2</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:C:/Users/Dell/Desktop/CHECKERS_CSC17B_48941/checkers/checkers.pro</value>
->>>>>>> origin/master
-=======
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">checkers2</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:C:/Users/Dell/Desktop/CHECKERS_CSC17B_48941/checkers/checkers.pro</value>
->>>>>>> origin/master
     <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.CommandLineArguments"></value>
     <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.ProFile">checkers.pro</value>
     <value type="bool" key="Qt4ProjectManager.Qt4RunConfiguration.UseDyldImageSuffix">false</value>

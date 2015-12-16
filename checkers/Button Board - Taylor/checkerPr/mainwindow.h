@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QString>
 #include <QLabel>
+#include <QPushButton>
 
 class MainWindow : public QMainWindow
 {
@@ -13,6 +14,7 @@ public:
      MainWindow(QWidget *parent = 0);
     QLabel *redLabel;
     QLabel *blackLabel;
+    QPushButton *reset;
 private:
 
 public slots:

@@ -17,11 +17,15 @@ QMAKE_MAC_SDK = macosx10.11
 SOURCES += main.cpp\
         mainwindow.cpp \
     tile.cpp \
-    board.cpp
+    board.cpp \
+    menudialog.cpp \
+    gameoverdialog.cpp
 
 HEADERS  += mainwindow.h\
          tile.h\
-         board.h
+         board.h \
+    menudialog.h \
+    gameoverdialog.h
 
 FORMS    +=
 

@@ -17,7 +17,6 @@ Board::Board(QWidget *parent) : QWidget(parent)
         // set the black piece icons. set tile state to blackpiece
         if (i < 12)
         {
-
             tiles[i]->setIcon(QIcon(":/images/icons/blackPiece.png"));
             tiles[i]->setIconSize(QSize(30,30));
             tiles[i]->state = Tile::BLACKPIECE;
@@ -120,7 +119,7 @@ void Board::handleClick(int loc)
             // MOVEDFROM etc. and
             if(checkMove(startLoc, loc))
             {
-                lastMovePlayer = moveNames[startLoc]+ " -> "+moveNames[loc];
+                lastMovePlayer = moveNames[startLoc]+ " to "+moveNames[loc];
                 // here we need to send this string to mainWindow so that the enemy label
                 // may be updated with last move.
                 makeMove();
@@ -129,6 +128,7 @@ void Board::handleClick(int loc)
                     // if win is found set player wins to true which precludes any
                     // more turns being taken and ends the game
                     playerWins = true;
+                    gameOver(playerWins);
                 }
                 else
                 {
@@ -156,11 +156,6 @@ void Board::handleClick(int loc)
     // save game, end game etc.
     // then we check if jumpTurn is true. if it is then skip changing turns. if not
     // continue on to the computers turn
-    if (playerWins)
-    {
-        // end/save game, show win screen etc and ask to play another game/return to menu
-
-    }
     if (!jumpTurn && !playersTurn)
     {
        computerTurn();
@@ -179,6 +174,20 @@ bool Board::checkForWin()
     }
     return true;
 }
+
+bool Board::checkForLoss()
+{
+    bool loss = true;
+    for (int i = 0; i < 32; i++)
+    {
+        if (tiles[i]->state == Tile::REDPIECE || tiles[i]->state == Tile::REDKING)
+        {
+            loss = false;
+        }
+    }
+    return loss;
+}
+
 bool Board::checkForKing(int loc)
 {
     if (loc>= 0 && loc < 4 && !(computersMove))
@@ -211,11 +220,8 @@ bool Board::setStartLoc(int loc)
     {
         return false;
     }
-    // first we want to determine whether or not the piece is one of the player's own
     if (tiles[loc]->state == Tile::REDPIECE || tiles[loc]->state == Tile::REDKING)
     {
-        // && player->color == Player::RED^
-
         // once we determine that the tile is one of the player's own we want
         // to check whether the start location has been set yet.
         if (startSelected)
@@ -230,13 +236,23 @@ bool Board::setStartLoc(int loc)
             // however we cannot simply set it to zero since that is a valid location.
         }
         // after unsetting the previous startLocations details we can move on
-        // with actions that apply regardless of whether or not the start loc had been set already
+        //  with actions that apply regardless of whether or not the start loc had been set already
         //  ths includes: set startLoc = loc
         //                determine moves
         //                highlight valid spaces and start location
         //                set startSelected to true
         startLoc = loc;
         determineMoves(loc);
+        /*
+        if (!determineMoves(loc))
+        {
+            if (computersMove)
+            {
+                playerWins = true;
+            }
+            gameOver(playerWins);
+        }
+        */
         highlight();
         startSelected = true;
         return true;
@@ -360,7 +376,7 @@ void Board::clearMoves()
 // fills the moves list with the location/index
 // of each valid move given the start location
 // of loc
-void Board::determineMoves(int loc)
+bool Board::determineMoves(int loc)
 {
     if (forwardLeftisValid(loc))
     {
@@ -395,7 +411,14 @@ void Board::determineMoves(int loc)
     {
         moves.push_back(loc+9);
     }
-
+    if (moves.size() >=1)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 void Board::makeMove()
 {
@@ -802,7 +825,7 @@ void Board::computerTurn()
     int i = 0;
     while (!(madeMove) && i < 32)
     {
-        //shuffledTiles.insert();
+        // shuffledTiles.insert();
         // generate set of integers randomly ordered from 0 to 32.
         // then go through that set and once we find a move, make it.
         if (tiles[shuffledTiles[i]]->state == Tile::BLACKPIECE || tiles[shuffledTiles[i]]->state == Tile::BLACKKING)
@@ -811,8 +834,11 @@ void Board::computerTurn()
         }
         i++;
     }
-
     computersMove = false;
+    if (playerLoses)
+    {
+        gameOver(playerWins);
+    }
 }
 bool Board::determineComputerMoves(int i)
 {
@@ -903,13 +929,14 @@ bool Board::determineComputerMoves(int i)
         {
             tiles[jumpedTile]->state = Tile::EMPTY;
             tiles[jumpedTile]->activity = Tile::NOACTIVITY;
+            playerLoses = checkForLoss();
         }
         highlightCompMoves(start,end);
         updateBoard();
         tiles[start]->activity = Tile::NOACTIVITY;
         tiles[end]->activity = Tile::NOACTIVITY;
         if (checkForKing(end)) {updateBoard();}
-        lastMoveEnemy = moveNames[start] + " -> " + moveNames[end];
+        lastMoveEnemy = moveNames[start] + " to " + moveNames[end];
         return true;
     }
    return false;
@@ -923,4 +950,50 @@ void Board::highlightCompMoves(int start,int end)
 void Board::em()
 {
     emit updateLastMoves(lastMovePlayer,lastMoveEnemy);
+}
+
+void Board::resetBoard()
+{
+    playerWins = false;
+    playerLoses = false;
+    startSelected = false;
+    for (int i = 0; i < 32; i ++)
+    {
+        QPalette pal = tiles[i]->palette();
+        pal.setColor(QPalette::Button, Qt::darkRed);
+        tiles[i]->setPalette(pal);
+        if (i < 12)
+        {
+            tiles[i]->setIcon(QIcon(":/images/icons/blackPiece.png"));
+            tiles[i]->setIconSize(QSize(30,30));
+            tiles[i]->state = Tile::BLACKPIECE;
+        }
+        // set red pieces.
+        else if (i>19)
+        {
+            tiles[i]->setIcon(QIcon(":/images/icons/checkersPiece.png"));
+            tiles[i]->setIconSize(QSize(30,30));
+            tiles[i]->state = Tile::REDPIECE;
+        }
+        else
+        {
+            tiles[i]->setIcon(QIcon());
+            tiles[i]->state = Tile::EMPTY;
+        }
+    }
+}
+
+void Board::gameOver(bool playerWins)
+{
+    if (playerWins)
+    {
+        // player has beat computer
+        resetBoard();
+    }
+    else
+    {
+        resetBoard();
+        this->close();
+    }
+
 }

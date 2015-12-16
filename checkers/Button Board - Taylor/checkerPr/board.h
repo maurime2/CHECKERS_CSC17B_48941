@@ -23,12 +23,14 @@ public:
     bool jumpOcc;
     bool jumpTurn;
     bool playerWins;
+    bool playerLoses;
 
     QString lastMovePlayer;
     QString lastMoveEnemy;
 
     // functions following move
     bool checkForWin();
+    bool checkForLoss();
     bool checkForKing(int loc);
     bool checkForJump(int loc);
 
@@ -38,7 +40,7 @@ public:
     void clearMoves();
     void highlight();
     bool tileIsEmpty(int loc);
-    void determineMoves(int loc);
+    bool determineMoves(int loc);
     void makeMove();
     void updatePiece(int loc);
     void updateBoard();
@@ -74,11 +76,16 @@ public:
     QList<int> moves;
     QList<int> computerMoves;
     QList<QString> moveNames;
+
+    // end of game
+    void gameOver(bool);
+
 signals:
     void updateLastMoves(QString,QString);
 public slots:
     void handleClick(int loc);
     void em();                  //emitter
+    void resetBoard();
 
 };
 
