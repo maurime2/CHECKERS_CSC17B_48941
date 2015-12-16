@@ -10,7 +10,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     //QWidget *Widget = new QWidget(this);
     this->setFixedSize(450,500);
-
+    menu = new MenuDialog(this);
+    menu->show();
     // this central QWidget could be subclassed as a custom Board widget
     Board *board = new Board(this);
     this->setCentralWidget(board);
@@ -118,6 +119,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     layout->addWidget(h,7,8);
 
     QObject::connect(reset,SIGNAL(clicked(bool)),board, SLOT(resetBoard()));
+    QObject::connect(this,SIGNAL(newGame()), board, SLOT(resetBoard()));
 }
 
 void MainWindow::updateLastMove(QString player, QString enemy)
@@ -125,4 +127,12 @@ void MainWindow::updateLastMove(QString player, QString enemy)
     redLabel->setText("Red: " + player);
     blackLabel->setText("Black: " + enemy);
 }
-
+void MainWindow::showMenu()
+{
+    //this->hide();
+    menu->show();
+}
+void MainWindow::resetB()
+{
+    emit newGame();
+}

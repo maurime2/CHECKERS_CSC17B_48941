@@ -15,9 +15,9 @@ int main(int argc, char *argv[])
 */
 
     MainWindow *w = new MainWindow;
-    MenuDialog *menuDialog = new MenuDialog(w);
+    //menuDialog = new MenuDialog(w);
     //QTimer::singleShot(1000, splash, SLOT(close()));
-    QTimer::singleShot(1000, menuDialog, SLOT(show()));
+    //QTimer::singleShot(1000, menuDialog, SLOT(show()));
     //w.show();
 
     return a.exec();

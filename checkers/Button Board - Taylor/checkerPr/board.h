@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QList>
 #include "tile.h"
+#include <gameoverdialog.h>
 
 class Board : public QWidget
 {
@@ -12,7 +13,7 @@ class Board : public QWidget
 public:
     Board(QWidget *parent = 0);
     QList<Tile *> tiles;
-
+    GameOverDialog *over;
     // holds integer representing index of start/end tile
     int startLoc;
     int endLoc;
@@ -69,7 +70,6 @@ public:
 
     void computerTurn();
     bool determineComputerMoves(int);
-    void highlightCompMoves(int start, int end);
 
     // holds list of all available moves
     // Is filled upon a valid start location being set
@@ -82,10 +82,15 @@ public:
 
 signals:
     void updateLastMoves(QString,QString);
+    void endScreen(bool win);
+    void returnToMenu();
+    void toClose();
 public slots:
     void handleClick(int loc);
     void em();                  //emitter
     void resetBoard();
+    void leave();
+    void backToMenu();
 
 };
 

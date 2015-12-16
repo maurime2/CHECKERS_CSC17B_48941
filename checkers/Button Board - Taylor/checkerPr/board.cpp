@@ -7,6 +7,7 @@ Board::Board(QWidget *parent) : QWidget(parent)
     QString s;
     for (int i = 0; i < 32; i++)
     {
+
         // create Tile with board parent. Add tile to vector
         tiles.push_back(new Tile(this));
         // set tile location to index
@@ -21,6 +22,8 @@ Board::Board(QWidget *parent) : QWidget(parent)
             tiles[i]->setIconSize(QSize(30,30));
             tiles[i]->state = Tile::BLACKPIECE;
         }
+
+
         // set red pieces.
         else if (i>19)
         {
@@ -30,10 +33,12 @@ Board::Board(QWidget *parent) : QWidget(parent)
         }
         // set black piece to test jumping
         // set state of all empty tiles to empty
+
         else
         {
             tiles[i]->state = Tile::EMPTY;
         }
+
     }
 
     QString n1;
@@ -88,8 +93,14 @@ Board::Board(QWidget *parent) : QWidget(parent)
     playerWins = false;
     jumpOcc = false;
     computersMove = false;
+    // create game over dialog which is shown when game ends
+    over = new GameOverDialog(this);
     // at this point nothing happens until the user clicks
     QObject::connect(this, SIGNAL(updateLastMoves(QString,QString)), parent, SLOT(updateLastMove(QString,QString)));
+    QObject::connect(this, SIGNAL(endScreen(bool)), over, SLOT(show()));
+    QObject::connect(this, SIGNAL(endScreen(bool)), over, SLOT(winOrLoss(bool)));
+    QObject::connect(this, SIGNAL(toClose()), parent, SLOT(close()));
+    QObject::connect(this,SIGNAL(returnToMenu()),parent,SLOT(showMenu()));
 
 }
 
@@ -837,6 +848,7 @@ void Board::computerTurn()
     computersMove = false;
     if (playerLoses)
     {
+        playerWins = false;
         gameOver(playerWins);
     }
 }
@@ -931,7 +943,6 @@ bool Board::determineComputerMoves(int i)
             tiles[jumpedTile]->activity = Tile::NOACTIVITY;
             playerLoses = checkForLoss();
         }
-        highlightCompMoves(start,end);
         updateBoard();
         tiles[start]->activity = Tile::NOACTIVITY;
         tiles[end]->activity = Tile::NOACTIVITY;
@@ -942,10 +953,7 @@ bool Board::determineComputerMoves(int i)
    return false;
 }
 
-void Board::highlightCompMoves(int start,int end)
-{
 
-}
 
 void Board::em()
 {
@@ -957,24 +965,31 @@ void Board::resetBoard()
     playerWins = false;
     playerLoses = false;
     startSelected = false;
+    lastMoveEnemy = " ";
+    lastMovePlayer = " ";
+    emit updateLastMoves(lastMoveEnemy,lastMovePlayer);
     for (int i = 0; i < 32; i ++)
     {
         QPalette pal = tiles[i]->palette();
         pal.setColor(QPalette::Button, Qt::darkRed);
         tiles[i]->setPalette(pal);
+
         if (i < 12)
         {
             tiles[i]->setIcon(QIcon(":/images/icons/blackPiece.png"));
             tiles[i]->setIconSize(QSize(30,30));
             tiles[i]->state = Tile::BLACKPIECE;
         }
+
         // set red pieces.
+
         else if (i>19)
         {
             tiles[i]->setIcon(QIcon(":/images/icons/checkersPiece.png"));
             tiles[i]->setIconSize(QSize(30,30));
             tiles[i]->state = Tile::REDPIECE;
         }
+
         else
         {
             tiles[i]->setIcon(QIcon());
@@ -985,15 +1000,15 @@ void Board::resetBoard()
 
 void Board::gameOver(bool playerWins)
 {
-    if (playerWins)
-    {
-        // player has beat computer
-        resetBoard();
-    }
-    else
-    {
-        resetBoard();
-        this->close();
-    }
+    emit endScreen(playerWins);
+    //over->show();
+}
 
+void Board::backToMenu()
+{
+    emit returnToMenu();
+}
+void Board::leave()
+{
+    emit toClose();
 }

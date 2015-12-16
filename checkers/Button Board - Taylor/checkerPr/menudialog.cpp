@@ -11,10 +11,16 @@ MenuDialog::MenuDialog(QWidget *parent) : QDialog(parent)
     quitButton = new QPushButton("Quit");
     optionsButton = new QPushButton("Options");
 
+    newButton->setStyleSheet("QPushButton {background-color:white}");
+    continueButton->setStyleSheet("QPushButton {background-color:white}");
+    loadButton->setStyleSheet("QPushButton {background-color:white}");
+    quitButton->setStyleSheet("QPushButton {background-color:white}");
+    optionsButton->setStyleSheet("QPushButton {background-color:white}");
+
     connect(this, SIGNAL(finished(int)), parent, SLOT(show()));
     connect(this, SIGNAL(closeGame()), parent, SLOT(close()));
 
-    connect(newButton, SIGNAL(clicked(bool)), parent, SLOT(newFile()));
+    connect(newButton, SIGNAL(clicked(bool)), parent, SLOT(resetB()));
     connect(newButton, SIGNAL(clicked(bool)), this, SLOT(close()));
 
     connect(continueButton, SIGNAL(clicked(bool)), parent, SLOT(open()));

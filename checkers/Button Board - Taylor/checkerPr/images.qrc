@@ -5,5 +5,7 @@
         <file>icons/King.png</file>
         <file>icons/blackKing.png</file>
         <file>background.jpg</file>
+        <file>icons/win.png</file>
+        <file>icons/loss.png</file>
     </qresource>
 </RCC>
